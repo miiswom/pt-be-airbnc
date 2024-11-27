@@ -41,8 +41,6 @@ Ensure you have the following installed:
 3. Initialize the database:
    npm run setup-dbs
 
-4. 
-
 ### Environment Variables
 
 This project uses environment variables, already made available, to securely store database credentials. The `dotenv` package loads these variables into the application, so the connection pool can use them to access the database. 
