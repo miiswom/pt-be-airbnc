@@ -4,8 +4,10 @@
   "description": "This project is an Express.js server that connects to a PostgreSQL database to handle user interactions for an Airbnb-style application. Users can manage properties, reviews, and interact with a booking system. The application is thoroughly tested with Jest and Supertest, following Test-Driven Development (TDD) principles.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "setup-dbs": "psql -f db/setup-dbs.sql"
+    "setup-dbs": "psql -f ./db/setup-dbs.sql",
+    "seed": "node ./db/run-seed.js",
+    "test-utils": "jest utils",
+    "test": "jest server"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +16,8 @@
     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "node-postgres": "^0.6.2"
+    "jest": "^29.7.0",
+    "node-postgres": "^0.6.2",
+    "pg": "^8.13.1"
   }
 }
