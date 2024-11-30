@@ -4,8 +4,8 @@ This project is an Express.js server that connects to a PostgreSQL database to h
 
 ## Features
 
-- **User Management**: Create, retrieve, update, and delete users.
-- **Property Management**: Add, view, update, and delete property listings.
+- **User Management**: Retrieve and update users.
+- **Property Management**: View and update property listings.
 - **Reviews**: Allow users to add, view, and delete reviews for properties.
 - **Booking System (Extended Task)**: Manage property bookings (without payment integration).
 - **Error Handling**: Implements happy and sad path handling for robust API responses.
@@ -14,9 +14,9 @@ This project is an Express.js server that connects to a PostgreSQL database to h
 
 - **Backend**: Node.js, Express.js
 - **Database**: PostgreSQL
-- **ORM/Database Integration**: node-postgres (pg)
+- **Database Integration**: node-postgres (pg)
 - **Testing**: Jest, Supertest
-- **Architecture**: MVC (Model-Controller-Route)
+- **Architecture**: MVC (Model-View-Controller)
 
 ## Getting Started
 
@@ -32,15 +32,18 @@ Ensure you have the following installed:
 ### Installation
 
 1. Clone the repository:
-   git clone https://github.com/miiswom/pt-be-airbnc.git
-   cd pt-be-airbnc.git
+   `git clone https://github.com/miiswom/pt-be-airbnc.git`
+   `cd pt-be-airbnc.git`
 
 2. Install dependencies:
-   npm install
+   `npm install`
 
 3. Initialize the database:
-   npm run setup-dbs
+   `npm run setup-dbs`
 
 ### Environment Variables
 
 This project uses environment variables, already made available, to securely store database credentials. The `dotenv` package loads these variables into the application, so the connection pool can use them to access the database. 
+
+- Credentials:
+` PGDATABASE=airbnc_test`

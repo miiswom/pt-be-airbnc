@@ -10,9 +10,9 @@ exports.createUsers = async() => {
                       email VARCHAR NOT NULL,
                       phone_number VARCHAR,
                       role VARCHAR,
+                      CONSTRAINT chk_role CHECK (role IN ('host', 'guest')),
                       avatar VARCHAR,
-                      CONSTRAINT chk_avatar CHECK (avatar IN ('host', 'guest')),
-                      created_at TIMESTAMP DEFAULT NOW() ) ;`)
+                      created_at text DEFAULT TO_CHAR(CURRENT_TIMESTAMP,'DD/MM/YYYY - HH24:MI:SS') ) ;`)
 };
 
 exports.createPropertyTypes = async () => {
@@ -29,7 +29,7 @@ exports.createProperties = async() => {
                       host_id INTEGER REFERENCES users(user_id),
                       name VARCHAR NOT NULL,
                       location VARCHAR NOT NULL,
-                      property_type VARCHAR NOT NULL REFERENCES property_types(property_type),
+                      property_type VARCHAR NOT NULL,
                       price_per_night DECIMAL NOT NULL,
                       description text );`)
 };
@@ -38,11 +38,11 @@ exports.createReviews = async() => {
   await db.query(`DROP TABLE IF EXISTS reviews CASCADE;`);
   await db.query(`CREATE TABLE reviews (
                     review_id SERIAL PRIMARY KEY,
-                    property_id INTEGER NOT NULL,
-                    guest_id INTEGER NOT NULL,
+                    property_id INTEGER NOT NULL REFERENCES properties(property_id),
+                    guest_id INTEGER NOT NULL REFERENCES users(user_id),
                     rating INTEGER NOT NULL,
                     comment text,
-                    created_at TIMESTAMP DEFAULT NOW());`) // limit to 5 starts
+                    created_at text DEFAULT TO_CHAR(CURRENT_TIMESTAMP,'DD/MM/YYYY - HH24:MI:SS'));`) // limit to 5 starts
                     
 };
 
