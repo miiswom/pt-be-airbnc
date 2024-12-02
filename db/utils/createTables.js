@@ -52,5 +52,5 @@ exports.createFavourites = async() => {
                     favourite_id SERIAL PRIMARY KEY,
                     guest_id INTEGER NOT NULL REFERENCES users(user_id),
                     property_id INTEGER NOT NULL REFERENCES properties(property_id) );`)
-}
+};
 
