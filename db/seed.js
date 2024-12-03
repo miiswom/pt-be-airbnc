@@ -4,8 +4,10 @@ const { insertUser, insertPropertyTypes, insertProperties, insertReviews, insert
 exports.seed = async () => {
   await createUsers();
   await createProperties();
-  await Promise.all([createPropertyTypes(), createReviews(), createFavourites()])
+  await Promise.all([createPropertyTypes(), createFavourites()])
+  await createReviews()
   await insertUser()
   await insertProperties();
-  await Promise.all([insertPropertyTypes(), insertReviews(), insertFavourites()])
+  await Promise.all([insertPropertyTypes(), insertFavourites()])
+  await insertReviews()
 };

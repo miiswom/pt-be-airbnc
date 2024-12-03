@@ -75,17 +75,11 @@ exports.insertReviews = () => {
 
 exports.insertFavourites = () => {
   const formattedFavourites = require("../data/test/favourites.json")
-  .map((favourite) => [
-    favourite.guest_id = getId(favourite.guest_name),
-    favourite.property_id = getPropId(favourite.property_name)])
+    .map((favourite) => [
+      favourite.guest_id = getId(favourite.guest_name),
+      favourite.property_id = getPropId(favourite.property_name)])
 
   return db.query(format(`INSERT INTO favourites( guest_id,
                                                   property_id) VALUES %L RETURNING *;`, formattedFavourites))
-    .then(({ rows }) => { 
-      if(rows.length === 0) {
-        return Promise.reject({msg: 'Not found'})
-      } else {
-        return Promise.resolve({rows})
-      }
-     });
+    .then(({ rows }) => { return rows });
 };

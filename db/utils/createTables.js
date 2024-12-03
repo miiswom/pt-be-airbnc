@@ -42,7 +42,7 @@ exports.createReviews = async() => {
                     guest_id INTEGER NOT NULL REFERENCES users(user_id),
                     rating INTEGER NOT NULL,
                     comment text,
-                    created_at text DEFAULT TO_CHAR(CURRENT_TIMESTAMP,'DD/MM/YYYY - HH24:MI:SS'));`) // limit to 5 starts
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);`) // limit to 5 starts
                     
 };
 
