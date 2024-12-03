@@ -13,16 +13,21 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
                     JOIN favourites
                     ON properties.property_id = favourites.property_id`;
   const defaultSort = ` ORDER BY favourites.guest_id`;
-  const defaultOrder = ` ASC`
-  if(maxprice) {
-    queryStr += format(` WHERE price_per_night < (%L)`, [maxprice])
-  }
-  if(!sort) {
-    queryStr += defaultSort
-  };
-  if(!order) {
-    queryStr += defaultOrder
-  }
+  const defaultOrder = ` ASC`;
+  const validSortKeys = ['property_id', 'property_name', 'location', 'price_per_night', 'host']
+
+  if (maxprice) { queryStr += format(` WHERE price_per_night < (%L)`, [maxprice]) }
+  if (minprice) { queryStr += format(` WHERE price_per_night > (%L)`, [minprice]) }
+  if (sort && validSortKeys.includes(sort)) { queryStr += ` ORDER BY ${sort}` }
+  if (!sort ) { queryStr += defaultSort }
+  if (!order) {  queryStr += defaultOrder }
+
   return db.query(queryStr)
-  .then(({rows}) => { return rows })
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return rows = undefined;
+      } else {
+        return rows
+      }
+    })
 };
