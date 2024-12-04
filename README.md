@@ -33,9 +33,7 @@ Ensure you have the following installed:
 
 ### Installation
 
-1. Clone the repository:
-   ``git clone https://github.com/miiswom/pt-be-airbnc.git``
-   ``cd pt-be-airbnc.git``
+1. Clone the repository
 
 2. Install dependencies:
    `npm install`
