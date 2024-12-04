@@ -1,8 +1,12 @@
+exports.handleNotFound = (req, res) => {
+  return res.status(404).json({msg: 'Sorry, not found.'})
+}
+
 exports.handleBadRequest = (req, res) => {
-  return res.status(400).send({msg: 'Sorry, bad request.'})
+  return res.status(400).json({msg: 'Sorry, bad request.'})
 };
 
 exports.handleMethodNotAllowed = (req, res) => {
-  return res.status(405).send({msg: 'Sorry, method not allowed.'})
-}
+  return res.status(405).json({msg: 'Sorry, method not allowed.'})
+};
 

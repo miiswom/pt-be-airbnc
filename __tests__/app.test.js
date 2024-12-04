@@ -3,7 +3,8 @@ const app = require("../app/app");
 const db = require("../db/connection")
 const { seed } = require("../db/seed");
 const data = require("../db/data/test");
-
+const { fetchFavourites } = require("../app/models")
+const numOfFavourites = async () => (await fetchFavourites()).length
 beforeEach(() => {
   return seed(data);
 });
@@ -46,8 +47,7 @@ describe("GET PROPERTIES", () => {
       const { body: { msg } } = res;
       expect(msg).toBe('Sorry, method not allowed.')
     })
-  })
-
+  });
 
   describe("GET /api/properties?maxprice=num", () => {
     test("200 - responds with an array of object which price_per_night is lower than the maxprice number", async () => {
@@ -66,7 +66,7 @@ describe("GET PROPERTIES", () => {
       expect(msg).toBe('Sorry, not found.')
 
     })
-  })
+  });
 
   describe("GET /api/properties?minprice=num", () => {
     test("200 - responds with an array of object which price_per_night is lower than the maxprice number", async () => {
@@ -90,8 +90,6 @@ describe("GET PROPERTIES", () => {
     test("200 - responds with an array of object sorted by the passed key", async () => {
       const res = await request(app).get('/api/properties?sort=price_per_night')
       const { body: { properties } } = res;
-      // const resBis =  await request(app).get('/api/properties?sort=popularity');
-      // const { body } = resBis;
 
       expect(properties).toBeSortedBy('price_per_night', { coerce: true })
     });
@@ -109,13 +107,8 @@ describe("GET PROPERTIES", () => {
     test("200 - responds with an array of object sorted by host_id", async () => {
       const res = await request(app).get('/api/properties?host=id')
       const { body: { properties } } = res;
-      const sortedByHostId = await db.query(`SELECT name
-                                                  FROM properties
-                                                  ORDER BY host_id;`).then(({ rows }) => { return rows.map((property) => { return property.prop_id }) })
-      const hostIdSort = properties.map((property) => {
-        return property.name
-      })
-      expect(hostIdSort).toEqual(sortedByHostId)
+
+      expect(properties).toBeSorted('host', { coerce: true })
     })
   });
 
@@ -125,29 +118,79 @@ describe("GET PROPERTIES", () => {
       const { body: { properties } } = res;
       expect(properties).toBeSortedBy('property_id')
     })
-  })
+  });
 
   describe("GET /api/properties?order=ascending | descending", () => {
-    test("responds with an array sorted in ascending order", async () => {
+    test("200 - responds with an array sorted in ascending order", async () => {
 
       const resAscOrder = await request(app)
-      .get('/api/properties?sort=price_per_night&order=ascending')
-      .then(({body : {properties }}) => { return properties})      
-      expect(resAscOrder).toBeSorted('price_per_night', {coerce: true})
+        .get('/api/properties?sort=price_per_night&order=ascending')
+        .then(({ body: { properties } }) => { return properties })
+      expect(resAscOrder).toBeSorted('price_per_night', { coerce: true })
 
       const resDescOrder = await request(app)
-      .get('/api/properties?sort=price_per_night&order=descending')
-      .then(({body : {properties }}) => { return properties})      
-    
-      expect(resDescOrder).toBeSorted('price_per_night', {descending: true}, {coerce: true})
-     })
+        .get('/api/properties?sort=price_per_night&order=descending')
+        .then(({ body: { properties } }) => { return properties })
+
+      expect(resDescOrder).toBeSorted('price_per_night', { descending: true }, { coerce: true })
+    })
+  });
+});
+
+describe("POST FAVOURITE", () => {
+  describe("POST /api/properties/:id/favourite", () => {
+    test("200 - responds with an object containing a successful message and the new favourite_id number", async () => {
+      const res = await request(app).post('/api/properties/1/favourite').send({ "guest_id": "1" });
+      const { body: { msg, favourite_id } } = res;
+      expect(res.status).toBe(201)
+      expect(msg).toBe('Property favourited successfully.')
+      expect(favourite_id).toBe(await numOfFavourites())
+    })
   })
-})
 
+    describe("POST /api/properties/:invalid_id/favourite", () => {
+          test("404 - responds with an object containing a 'Sorry, not found' error message ", async () => {
+      const res = await request(app).post('/api/properties/100000/favourite').send({ "guest_id": "99999999" });
+      const { body: { msg } } = res;
+      expect(res.status).toBe(404)
+      expect(msg).toBe('Sorry, not found.')
+    })
+    })
+});
 
-// test("400 - should respond with a object contaning the message 'Sorry, bad request'", async () => {
-//   const res = await request(app).get('/api/invalid/endpoint');
-//   const { body: { msg } } = res;
-//   expect(res.status).toBe(400)
-//   expect(msg).toBe('Sorry, bad request.');
-// });
+describe("DELETE FAVOURITE", () => {
+  describe("DELETE /api/properties/:id/favourite", () => {
+    test("204 - responds with a status code of 204 and an empty body", async () => {
+      const res = await request(app).delete('/api/properties/10/favourite');
+      const { body } = res;
+      expect(res.status).toBe(204)
+      expect(body).toBeEmptyObject()
+    })    })
+    describe("DELETE /api/properties/:invalid_id/favourite", () => {
+      test("404 - responds with a 'Sorry, not found' error message", async () => {
+        const res = await request(app).delete('/api/properties/999999/favourite');
+        const { body: { msg } } = res;
+        expect(res.status).toBe(404)
+        expect(msg).toBe('Sorry, not found.')
+      })
+    })
+});
+
+describe("GET PROPERTY", () => {
+  describe("GET /api/properties/:id", () => {
+    test("200 - respond with a property object", async () => {
+      const res = await request(app).get('/api/properties/1');
+      const { body : {property }} = res;
+      expect(res.status).toBe(200)
+      expect(property).toBeObject()
+    });
+
+    test("200 - property object should contains keys of 'property_id', 'property_name', 'location', 'price_per_night', 'description', 'host', 'host_avatar'", async () => {
+      const res = await request(app).get('/api/properties/1');
+      const { body: { property } } = res;
+      for(const keys in property) {
+        expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'description', 'host', 'host_avatar'])
+      }
+    });
+  });
+});
