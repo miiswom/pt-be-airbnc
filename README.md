@@ -26,14 +26,16 @@ Follow these instructions to get the project up and running on your local machin
 
 Ensure you have the following installed:
 - [Node.js](https://nodejs.org/) (v16 or higher)
+- [Express] (https://expressjs.com/en/starter/installing.html)
 - [PostgreSQL](https://www.postgresql.org/) (v12 or higher)
-- [npm](https://www.npmjs.com/)
+- [npm] (https://www.npmjs.com/)
+- [dotenv] (https://www.npmjs.com/package/dotenv)
 
 ### Installation
 
 1. Clone the repository:
-   `git clone https://github.com/miiswom/pt-be-airbnc.git`
-   `cd pt-be-airbnc.git`
+   ``git clone https://github.com/miiswom/pt-be-airbnc.git``
+   ``cd pt-be-airbnc.git``
 
 2. Install dependencies:
    `npm install`
@@ -46,4 +48,4 @@ Ensure you have the following installed:
 This project uses environment variables, already made available, to securely store database credentials. The `dotenv` package loads these variables into the application, so the connection pool can use them to access the database. 
 
 - Credentials:
-` PGDATABASE=airbnc_test`
+`PGDATABASE=airbnc_test`

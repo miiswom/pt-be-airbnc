@@ -1,13 +1,13 @@
 const express = require("express");
 const { getProperties } = require("./controllers");
-const { handleInvalid } = require("./errors")
+const { handleBadRequest, handleMethodNotAllowed } = require("./errors")
 
 const app = express();
 
 
 app.get("/api/properties", getProperties);
-
-app.all("*", handleInvalid);
+app.delete("/api/properties", handleMethodNotAllowed);
+app.all("*", handleBadRequest);
 
 // app.use((err, req, res, next) => {
 //   console.error(err);
