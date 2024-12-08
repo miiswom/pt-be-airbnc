@@ -1,5 +1,9 @@
 const db = require("../db/connection");
 const format = require("pg-format");
+const numOfProperties = async () => (await this.fetchProperties()).length
+const numOfReviews = async () => (await this.fetchPropertyReviews()).length
+const numOfGuest = async () => (await this.fetchGuests()).length
+
 
 exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
   let queryStr = `SELECT  favourites.property_id,
@@ -56,7 +60,6 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
   if (!order) {
     queryStr += defaultOrder
   }
-  // console.log(queryStr + defineOrder)
   return db.query(queryStr + defineOrder).then(({ rows }) => {
     if (rows.length === 0 || !rows) {
       return rows = undefined;
@@ -77,40 +80,130 @@ exports.createFavourite = (guest_id, id) => {
       .query("")
       .then(({ rows }) => { return rows[0] })
   }
+  if (!Number(id) > 0 || !Number(guest_id) > 0) {
+
+    throw new Error("Invalid typeof")
+  }
   return db
     .query(format(`INSERT INTO favourites(guest_id, property_id) VALUES (%L) RETURNING *`, [guest_id, id]))
     .then(({ rows }) => {
-      return rows.length === 0 ? undefined : rows[0]  
+      return rows.length === 0 ? undefined : rows[0]
     })
 };
 
 exports.removeFavourite = (id) => {
-  console.log(`deleting favourite ${id}`)
+  if (!Number(id) > 0) {
+    throw new Error("Invalid typeof")
+  }
+
   return db
-  .query(format(`DELETE FROM favourites WHERE favourite_id = (%L) RETURNING *`, [id]))
-  .then(({rows}) => {
-    if(rows.length === 0) {
-      return rows = undefined
-    } else {
-      return rows[0]
-    }
-  })
+    .query(format(`DELETE FROM favourites WHERE favourite_id = (%L) RETURNING *`, [id]))
+    .then(({ rows }) => {
+
+      if (rows.length === 0) {
+        return rows = undefined
+      } else {
+        return rows[0]
+      }
+    })
 };
 
-exports.fetchPropertyById = (id) => {
+exports.fetchPropertyById = async (req, res, id) => {
+if (Number(id) > await numOfProperties()) {
+    return undefined
+  }
+  if (!Number(id) > 0) {
+    return "Bad request."
+  }
   return db
-  .query(format(`SELECT properties.property_id, 
+    .query(format(`SELECT properties.property_id, 
                         properties.name AS property_name, 
                         location, 
                         price_per_night, 
                         description, 
                         CONCAT(first_name, ' ', surname) AS host,
-                        avatar AS host_avatar
+                        avatar AS host_avatar,
+                        COUNT(favourites.property_id) AS favourite_count
                     FROM properties
                       JOIN users
                         ON properties.host_id = users.user_id
                       JOIN favourites
                         ON properties.property_id = favourites.property_id
-                    WHERE properties.property_id = (%L)`, [id]))
-  .then(({rows}) => {return rows[0]})
+                    WHERE properties.property_id = (%L)
+                    GROUP BY properties.property_id, users.first_name, users.surname, users.avatar`, [id]))
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return undefined
+      }
+      else {
+        return rows[0]
+      }
+    }
+    )
+};
+
+exports.fetchPropertyReviews = (id) => {
+if(!Number(id) > 0) {
+  throw new Error('Invalid typeof id')
 }
+  return db.query(format(`SELECT review_id,
+                          comment,
+                          rating,
+                          reviews.created_at,
+                          CONCAT(first_name, ' ', surname) AS guest,
+                          avatar AS guest_avatar
+                      FROM reviews
+                        JOIN users
+                          ON reviews.guest_id = users.user_id
+                      WHERE review_id = %L`, [id]))
+    .then(({ rows }) => { 
+      if(rows.length === 0) {
+        return false
+      } else {
+              return rows
+
+      }
+     })
+};
+
+exports.calcAverageRating = async (obj) => {
+  let total = 0;
+  let average_ratings = 0;
+
+  for (const keys in obj) {
+    total += obj[keys].rating;
+  }
+  average_ratings = total / obj.length
+  return average_ratings;
+};
+
+exports.fetchGuests = () => {
+  return db.query(`SELECT user_id FROM users`).then(({rows}) => {return rows})
+}
+
+
+exports.createReview = async (id, guest_id, rating, comment) => {
+if(id === 0 || id > await numOfProperties() || guest_id > await numOfGuest()) {
+  return undefined
+}
+if(!Number(id) > 0 || !Number(guest_id) || !Number(rating)) {
+  return 'Bad request.'
+};
+
+  return db.query(format(`INSERT INTO reviews( property_id,
+                                        guest_id,
+                                        rating,
+                                        comment) VALUES (%L) RETURNING *`, [id, guest_id, rating, comment]))
+            .then(({rows}) => { 
+              return rows[0] 
+            })
+};
+
+exports.removeReview = (id) => {
+  if(!Number(id) > 0) {
+    throw new Error('Invalid typeof id.')
+  }
+  return db.query(`DELETE FROM reviews WHERE review_id = $1 RETURNING *`, [id])
+  .then(({rows}) => { return rows[0]})
+};
+
