@@ -42,9 +42,16 @@ describe("GET PROPERTIES", () => {
     });
 
     test("405 - respond with an error message 'Sorry, method not allowed.'", async () => {
-      const res = await request(app).delete('/api/properties');
-      const { body: { msg } } = res;
-      expect(msg).toBe('Sorry, method not allowed.')
+      // const res = await request(app).delete('/api/properties');
+      // const { body: { msg } } = res;
+      // expect(msg).toBe('Sorry, method not allowed.')
+      const methods = ['delete', 'put', 'patch']
+      for (const method of methods) {
+        const res = await request(app)[method]('/api/properties')
+        const { body: { msg }} = res;
+        expect(res.status).toBe(405);
+        expect(msg).toBe('Sorry, method not allowed.')
+      }
     })
   });
 
@@ -217,8 +224,8 @@ describe("DELETE FAVOURITE", () => {
     test("400 - responds with a 'Sorry, bad request' error message", async () => {
       const res = await request(app).delete('/api/fdfafd/10');
       const { body: { msg } } = res;
-      expect(res.status).toBe(400)
-      expect(msg).toBe('Sorry, bad request.')
+      expect(res.status).toBe(404)
+      expect(msg).toBe('Sorry, invalid endpoint.')
     })
   })
 });
@@ -258,19 +265,13 @@ describe("GET PROPERTY", () => {
   });
   describe("DELETE /api/properties/:id", () => {
     test("405 - respond with an error message 'Sorry, method not allowed.'", async () => {
-      const res = await request(app).delete('/api/properties/1');
-      const { body: { msg } } = res;
-      expect(res.status).toBe(405)
-      expect(msg).toBe('Sorry, method not allowed.')
-    });
-  });
-
-  describe("PATCH /api/properties/:id", () => {
-    test("405 - respond with an error message 'Sorry, method not allowed.'", async () => {
-      const res = await request(app).patch('/api/properties/1');
-      const { body: { msg } } = res;
-      expect(res.status).toBe(405)
-      expect(msg).toBe('Sorry, method not allowed.')
+      const methods = ['delete', 'put', 'patch',]
+      for (const method of methods) {
+        const res = await request(app)[method]('/api/properties/1')
+        const { body: { msg }} = res;
+        expect(res.status).toBe(405);
+        expect(msg).toBe('Sorry, method not allowed.')
+      }
     });
   });
 });
@@ -316,12 +317,15 @@ describe("GET PROPERTY REVIEWS", () => {
     })
   })
 
-  describe("PATCH /api/properties/:id/reviews", () => {
+  describe("INVALID METHODS /api/properties/:id/reviews", () => {
     test("405 - responds with a 'Sorry, method not allowed' error message", async () => {
-      const res = await request(app).patch('/api/properties/1/reviews');
-      const { body: { msg } } = res;
-      expect(res.status).toBe(405)
-      expect(msg).toBe('Sorry, method not allowed.')
+      const methods = ['delete', 'put', 'patch']
+      for (const method of methods) {
+        const res = await request(app)[method]('/api/properties/1/reviews')
+        const { body: { msg }} = res;
+        expect(res.status).toBe(405);
+        expect(msg).toBe('Sorry, method not allowed.')
+      }
     })
   })
 })
@@ -372,15 +376,6 @@ describe("POST PROPERTY REVIEWS", () => {
       expect(msg).toBe('Sorry, bad request.')
     })
   });
-
-  describe("POST /api/properties/:invalid_id/reviews", () => {
-    test("405 - responds with an object containing an error message 'Sorry, method not allowed.'", async () => {
-      const res = await request(app).patch('/api/properties/1/reviews')
-      const { body: { msg}} =res;
-      expect(res.status).toBe(405)
-      expect(msg).toBe('Sorry, method not allowed.')
-    })
-  })
 
   describe("POST /api/properties/:id [unavailable guest_id ]", () => {
     test("400 - responds with a json containing an error message 'Sorry, not found.'", async () => {
@@ -443,7 +438,7 @@ describe("POST PROPERTY REVIEWS", () => {
 
 // add test to limit rating number to 5 max
 
-describe.only("DELETE PROPERTY REVIEW", () => {
+describe("DELETE PROPERTY REVIEW", () => {
   describe("DELETE /api/reviews/:id", () => {
     test("204 - responds with a status code 204", async () => {
       const res = await request(app).delete('/api/reviews/1')
@@ -469,13 +464,64 @@ describe.only("DELETE PROPERTY REVIEW", () => {
     })
   });
 
-  describe("PATCH /api/reviews/:id", () => {
+  describe("INVALID METHODS /api/reviews/:id", () => {
     test("405 - responds with a json containing an error message 'Sorry, method not allowed'", async () => {
-      const res = await request(app).patch('/api/reviews/1')
-      const {body: {msg}} = res;
-      expect(res.status).toBe(405)
-      expect(msg).toBe('Sorry, method not allowed.')
+      const methods = ['get', 'put', 'post', 'patch']
+      for (const method of methods) {
+        const res = await request(app)[method]('/api/reviews/1')
+        const { body: { msg }} = res;
+        expect(res.status).toBe(405);
+        expect(msg).toBe('Sorry, method not allowed.')
+      }
     })
   })
+});
 
+describe("GET USER", () => {
+  describe("GET /api/users/:id", () => {
+    test("200 - responds with an object containing the keys of 'user_id', 'first_name', 'surname', 'email', 'phone_number', 'avatar' and 'created_at'", async () => {
+      const res = await request(app).get('/api/users/1')
+      const { body: { user}} = res;
+      expect(user).toContainAllKeys(['user_id', 'first_name', 'surname', 'email', 'phone_number', 'avatar', 'created_at'])
+    })
+  });
+
+  describe("GET /api/users/:unavailable_id", () => {
+    test("404 - responds with a json containing a message 'Sorry, not found'", async () => {
+      const res = await request(app).get('/api/users/1000')
+      const { body: { msg }} = res;
+      expect(res.status).toBe(404)
+      expect(msg).toBe('Sorry, not found.')
+    })
+  });
+
+  describe("GET /api/users/:invalid_id", () => {
+    test("400 - responds with a json containing a message 'Sorry, bad request'", async () => {
+      const res = await request(app).get('/api/users/banana')
+      const { body: { msg }} = res;
+      expect(res.status).toBe(400)
+      expect(msg).toBe('Sorry, bad request.')
+    })
+  });
+
+  describe("GET /api/users/:invalid/endpoint", () => {
+    test("404 - responds with a json containing a message 'Sorry, not found'", async () => {
+      const res = await request(app).get('/api/usersss/1')
+      const { body: { msg }} = res;
+      expect(res.status).toBe(404)
+      expect(msg).toBe('Sorry, invalid endpoint.')
+    })
+  });
+
+  describe("DELETE /api/users/:id", () => {
+    test("404 - responds with a json containing a message 'Sorry, method not allowed'", async () => {
+      const methods = ['delete', 'put', 'patch', 'post']
+      for (const method of methods) {
+        const res = await request(app)[method]('/api/users/1')
+        const { body: { msg }} = res;
+        expect(res.status).toBe(405);
+        expect(msg).toBe('Sorry, method not allowed.')
+      }
+    })
+  })
 })

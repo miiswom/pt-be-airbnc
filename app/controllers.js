@@ -1,68 +1,63 @@
-const asyncHandler = require("express-async-handler");
-const { fetchProperties, fetchPropertyById, createFavourite, removeFavourite, fetchPropertyReviews, calcAverageRating, createReview, removeReview } = require("./models");
-const { handleBadRequest } = require("./errors");
+const { fetchProperties, fetchPropertyById, createFavourite, removeFavourite, fetchPropertyReviews, calcAverageRating, createReview, removeReview, fetchUserById, updateUser} = require("./models");
 
 exports.getProperties = (req, res, next) => {
   const { maxprice, minprice, sort, order, host } = req.query
-  try {
-    fetchProperties(maxprice, minprice, sort, order, host)
-      .then((properties) => {
-        if (!properties) {
-          return next()
-        }
-        return res.status(200).json({ properties })
-      })
-  } catch (err) {
-    console.log(err)
-  }
+  fetchProperties(maxprice, minprice, sort, order, host)
+
+    .then((properties) => {
+      if (!properties) {
+        next(err)
+      }
+      res.status(200).json({ properties })
+    })
+    .catch((err) => {
+      console.log(err)
+      next(err)
+    })
+
 };
 
 exports.postNewFavourite = (req, res, next) => {
   const { guest_id } = req.body;
   const { id } = req.params;
-  try {
-    createFavourite(guest_id, id).then((favourite) => {
+  createFavourite(guest_id, id)
+    .then((favourite) => {
       if (!favourite) {
-        return next()
+        next(err)
       }
-      return res.status(201).json({ msg: 'Property favourited successfully.', favourite_id: favourite.favourite_id })
+      res.status(201).json({ msg: 'Property favourited successfully.', favourite_id: favourite.favourite_id })
     })
-  } catch (err) {
-    handleBadRequest(req, res)
-  }
-};
+    .catch((err) => {
+      console.log("2")
+      console.log(err)
+      next(err)
+    })
+}
 
 exports.deleteFavourite = (req, res, next) => {
   const { id } = req.params;
-  try {
-
-    removeFavourite(id).then((favourite) => {
+  removeFavourite(id)
+    .then((favourite) => {
       if (!favourite) {
-        return next()
+        next(err)
       }
-      return res.status(204).send({})
+      res.status(204).json({})
+    }).catch((err) => {
+      console.log("2")
+      next(err)
     })
-  } catch (err) {
-    handleBadRequest(req, res)
-  }
 };
-
-// --- Blocker: --- //
 
 exports.getPropertyById = async (req, res, next) => {
   const { id } = req.params;
-  try {
-    fetchPropertyById(req, res, id).then((property) => {
-      if (property === undefined) {
-        return next()
-      }
-      if (property === 'Bad request.') {
-        return res.status(400).json({ msg: 'Sorry, bad request.' })
-      }
-      return res.status(200).json({ property: property })
-    })
-  } catch (error) {
-  }
+  fetchPropertyById(req, res, id).then((property) => {
+    if (!property) {
+      next(err)
+    }
+    res.status(200).json({ property: property })
+  }).catch((err) => {
+    next(err)
+  })
 };
 
 exports.getPropertyReview = async (req, res, next) => {
@@ -71,44 +66,69 @@ exports.getPropertyReview = async (req, res, next) => {
     const reviews = await fetchPropertyReviews(id);
     const average_rating = await calcAverageRating(reviews);
     if (!reviews) {
-      return next()
+      next(err)
+    } else {
+      res.status(200).json({ reviews, average_rating })
     }
-    return res.status(200).json({ reviews, average_rating })
   } catch (err) {
-    handleBadRequest(req, res, next)
+    console.log("2")
+    next(err)
   }
 };
 
 exports.postNewReview = (req, res, next) => {
   const { guest_id, rating, comment } = req.body;
   const { id } = req.params
-  try{
-    createReview(id, guest_id, rating, comment).then((review) => {   
-      if(!review) {
-        return next()
-      }   
-      if(review === 'Bad request.') {
-        return res.status(400).json({ msg: 'Sorry, bad request.' })
-      }
-      res.status(201).json(review)
-    })
-  } catch(err) {
 
-  }
+  createReview(id, guest_id, rating, comment)
+    .then((review) => {
+      if (!review) {
+        next(err)
+      } 
+      res.status(201).json(review)
+
+    }).catch((err) => {
+     next(err)
+    })
 };
 
 exports.deleteReview = (req, res, next) => {
-  const {id} = req.params;
-
-  try {
-    removeReview(id).then((review) => {
-      if(!review) {
-        return next()
+  const { id } = req.params;
+  removeReview(id)
+  .then((review) => {
+      if (!review) { 
+        next(err) 
       }
-      return res.status(204).json({})
-    })
-  } catch(err) {
-      handleBadRequest(req, res)
-  }
+      res.status(204).json({})
+    }).catch((err) => { next(err) })
+};
+
+exports.getUserById = (req, res, next) => {
+  const { id } = req.params;
+  fetchUserById(id).then((user) => {
+    if(!user) {
+      next(err)
+    }
+    res.status(200).json({user})
+  }).catch((err) => {
+    next(err)
+  })
+};
+
+exports.patchUser = (req, res, next) => {
+const { first_name, surname, email, phone, avatar } = req.body
+console.log(req.body)
+const { id } = req.params
+updateUser(id, first_name, surname, email, phone, avatar)
+.then((user) => {
+  console.log(user)
+  res.status(200).json(user)
+}).catch((err) => {
+  next(err)
+})
 }
+
+
+
+
 

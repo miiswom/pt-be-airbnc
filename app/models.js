@@ -1,9 +1,30 @@
 const db = require("../db/connection");
 const format = require("pg-format");
-const numOfProperties = async () => (await this.fetchProperties()).length
+const numOfProperties = async () => (await this.validPropertyIds()).length
 const numOfReviews = async () => (await this.fetchPropertyReviews()).length
-const numOfGuest = async () => (await this.fetchGuests()).length
+const numOfGuest = async () => (await this.fetchGuests()).length;
 
+const validPropertyIds = async () => {
+  return db.query(`SELECT property_id FROM properties`)
+    .then(({ rows }) => {
+      const ids = []
+      rows.forEach((row) => {
+        ids.push(row.property_id)
+      })
+      return ids
+    }).catch((err) => { console.log(err) })
+};
+
+const validUsersIds = async () => {
+  return db.query(`SELECT user_id FROM users`)
+    .then(({ rows }) => {
+      const ids = []
+      rows.forEach((row) => {
+        ids.push(row.user_id)
+      })
+      return ids
+    }).catch((err) => { console.log(err) })
+};
 
 exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
   let queryStr = `SELECT  favourites.property_id,
@@ -35,7 +56,7 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
     } else {
       queryStr = ""
       return db.query(queryStr).then(({ rows }) => {
-        return rows = undefined
+        return Promise.reject({ status: 404 });
       })
     }
   }
@@ -50,7 +71,7 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
     } else {
       queryStr = ""
       return db.query(queryStr).then(({ rows }) => {
-        return rows = undefined
+        return Promise.reject({ status: 404 });
       })
     }
   }
@@ -62,7 +83,7 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
   }
   return db.query(queryStr + defineOrder).then(({ rows }) => {
     if (rows.length === 0 || !rows) {
-      return rows = undefined;
+      return Promise.reject({ status: 404 });
     } else {
       return rows
     }
@@ -74,26 +95,30 @@ exports.fetchFavourites = () => {
     .then(({ rows }) => { return rows })
 };
 
-exports.createFavourite = (guest_id, id) => {
-  if (guest_id === 0 || guest_id > 6) {
-    return db
-      .query("")
-      .then(({ rows }) => { return rows[0] })
+exports.createFavourite = async (guest_id, id) => {
+  if (Number(id) === NaN || Number(guest_id) === NaN) {
+    return Promise.reject({ status: 400, msg: 'Sorry, bad request.' })
   }
-  if (!Number(id) > 0 || !Number(guest_id) > 0) {
+  if (guest_id === 0 || guest_id > 6) {
+    console.log("1")
 
-    throw new Error("Invalid typeof")
+    return Promise.reject({ status: 404, msg: 'Sorry, not found.' })
   }
   return db
     .query(format(`INSERT INTO favourites(guest_id, property_id) VALUES (%L) RETURNING *`, [guest_id, id]))
     .then(({ rows }) => {
-      return rows.length === 0 ? undefined : rows[0]
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Sorry, not found.' })
+
+      } else {
+        return rows[0]
+      }
     })
 };
 
 exports.removeFavourite = (id) => {
-  if (!Number(id) > 0) {
-    throw new Error("Invalid typeof")
+  if (Number(id) === NaN) {
+    return Promise.reject({ status: 400 })
   }
 
   return db
@@ -101,19 +126,20 @@ exports.removeFavourite = (id) => {
     .then(({ rows }) => {
 
       if (rows.length === 0) {
-        return rows = undefined
+        return Promise.reject({ status: 404 })
       } else {
         return rows[0]
       }
     })
 };
 
-exports.fetchPropertyById = async (req, res, id) => {
-if (Number(id) > await numOfProperties()) {
-    return undefined
+exports.fetchPropertyById = async (id) => {
+  if (Number(id) > await validPropertyIds()) {
+    console.log("1")
+    return Promise.reject({ status: 404 })
   }
   if (!Number(id) > 0) {
-    return "Bad request."
+    return Promise.reject({ status: 400 })
   }
   return db
     .query(format(`SELECT properties.property_id, 
@@ -133,7 +159,7 @@ if (Number(id) > await numOfProperties()) {
                     GROUP BY properties.property_id, users.first_name, users.surname, users.avatar`, [id]))
     .then(({ rows }) => {
       if (rows.length === 0) {
-        return undefined
+        return Promise.reject({ status: 404 })
       }
       else {
         return rows[0]
@@ -143,9 +169,9 @@ if (Number(id) > await numOfProperties()) {
 };
 
 exports.fetchPropertyReviews = (id) => {
-if(!Number(id) > 0) {
-  throw new Error('Invalid typeof id')
-}
+  if (Number(id) === NaN) {
+    return Promise.reject({ status: 400 })
+  }
   return db.query(format(`SELECT review_id,
                           comment,
                           rating,
@@ -156,54 +182,106 @@ if(!Number(id) > 0) {
                         JOIN users
                           ON reviews.guest_id = users.user_id
                       WHERE review_id = %L`, [id]))
-    .then(({ rows }) => { 
-      if(rows.length === 0) {
-        return false
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        console.log("1")
+        return Promise.reject({ status: 404 })
       } else {
-              return rows
-
+        return rows
       }
-     })
+    })
 };
 
 exports.calcAverageRating = async (obj) => {
   let total = 0;
-  let average_ratings = 0;
+  let average_rating = 0;
 
   for (const keys in obj) {
     total += obj[keys].rating;
   }
   average_ratings = total / obj.length
-  return average_ratings;
+  return average_rating;
 };
 
 exports.fetchGuests = () => {
-  return db.query(`SELECT user_id FROM users`).then(({rows}) => {return rows})
+  return db.query(`SELECT user_id FROM users`).then(({ rows }) => { return rows })
 }
 
 
 exports.createReview = async (id, guest_id, rating, comment) => {
-if(id === 0 || id > await numOfProperties() || guest_id > await numOfGuest()) {
-  return undefined
-}
-if(!Number(id) > 0 || !Number(guest_id) || !Number(rating)) {
-  return 'Bad request.'
-};
 
-  return db.query(format(`INSERT INTO reviews( property_id,
-                                        guest_id,
-                                        rating,
-                                        comment) VALUES (%L) RETURNING *`, [id, guest_id, rating, comment]))
-            .then(({rows}) => { 
-              return rows[0] 
-            })
+  if (Number(id) === NaN || Number(guest_id) === NaN || Number(rating) === NaN) {
+    return Promise.reject({ status: 400 })
+  }
+  if (id === 0 || (Number(id) > 0 && !(await validPropertyIds()).includes(Number(id))) || guest_id > await numOfGuest()) {
+    return Promise.reject({ status: 404 })
+  } 
+    return db.query(format(`INSERT INTO reviews( property_id,
+      guest_id,
+      rating,
+      comment) VALUES (%L) RETURNING *`, [id, guest_id, rating, comment]))
+      .then(({ rows }) => {
+        return rows[0]
+      })
 };
 
 exports.removeReview = (id) => {
-  if(!Number(id) > 0) {
-    throw new Error('Invalid typeof id.')
+  if (Number(id) === NaN) {
+    return Promise.reject({status: 400})
   }
   return db.query(`DELETE FROM reviews WHERE review_id = $1 RETURNING *`, [id])
-  .then(({rows}) => { return rows[0]})
+    .then(({ rows }) => { 
+      if(rows.length === 0) {
+        return Promise.reject({status: 404})
+      } else {
+        return rows[0] 
+      }
+    })
 };
 
+exports.fetchUserById = async (id) => {
+  const values = [];
+  if(id) values.push(id)
+
+  return db.query(`SELECT user_id,
+                          first_name,
+                          surname,
+                          email, 
+                          phone_number,
+                          avatar, 
+                          created_at
+                      FROM users WHERE user_id = $1 `, values).then(({rows}) => { 
+                        if(rows.length === 0) {
+                          return Promise.reject({status: 404})
+                        } else {
+                          return rows[0]}
+                        }
+                          )
+};
+
+exports.updateUser = (id, first_name, surname, email, phone, avatar) => {
+  const values = [];
+  // let queryStr = `UPDATE users SET`;
+  // let userId = ` WHERE user_id= $1`
+  if(id) {
+    values.push(id);
+  }
+  if(first_name) {
+    values.push(first_name);
+  };
+
+  console.log(values)
+
+  // // if(surname) values.push(surname);
+  // // if(email) values.push(email);
+  // // if(phone) values.push(phone);
+  // // if(avatar) values.push(avatar);
+  // console.log(queryStr + userId + ` RETURNING *;`, values, [id])
+  return db.query(`UPDATE users SET first_name= $2 WHERE user_id= $1 RETURNING *;`, values)
+  .then(({rows}) => { 
+    // values.push(rows[0].user_id)
+    // return db.query(`UPDATE users SET first_name`)
+    return rows[0]
+  }
+)
+}

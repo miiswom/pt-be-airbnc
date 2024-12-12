@@ -1,26 +1,39 @@
 const express = require("express");
-const { getProperties, getPropertyById, postNewFavourite, deleteFavourite, getPropertyReview, postNewReview, deleteReview} = require("./controllers");
-const { handleNotFound, handleBadRequest, handleMethodNotAllowed } = require("./errors")
+const { getProperties, getPropertyById, postNewFavourite, deleteFavourite, getPropertyReview, postNewReview, deleteReview, getUserById, patchUser} = require("./controllers");
+const { handleNotFound, handleBadRequest, handleMethodNotAllowed, handleInvalidEndpoint } = require("./errors")
 const app = express();
 
 app.use(express.json());
 
-app.get("/api/properties", getProperties, handleNotFound);
-app.get("/api/properties/:id", getPropertyById, handleNotFound)
-app.post("/api/properties/:id/favourite", postNewFavourite, handleNotFound);
-app.get("/api/properties/:id/reviews", getPropertyReview, handleNotFound);
-app.post("/api/properties/:id/reviews", postNewReview, handleNotFound);
+// properties router //
+app.get("/api/properties", getProperties);
+app.get("/api/properties/:id", getPropertyById)
+app.post("/api/properties/:id/favourite", postNewFavourite);
+app.get("/api/properties/:id/reviews", getPropertyReview);
+app.post("/api/properties/:id/reviews", postNewReview);
+app.all("/api/properties/?(*)?", handleMethodNotAllowed);
 
-app.delete("/api/favourite/:id", deleteFavourite, handleNotFound);
+// favourite router //
+app.delete("/api/favourite/:id", deleteFavourite);
 
-app.delete("/api/reviews/:id", deleteReview, handleNotFound);
+// review router //
+app.delete("/api/reviews/:id", deleteReview);
 app.all("/api/reviews/:id", handleMethodNotAllowed)
 
+// users router //
+app.get('/api/users/:id', getUserById)
+app.patch('/api/users/:id', patchUser)
+app.all('/api/users/:id', handleMethodNotAllowed)
 
-app.delete("/api/properties/(*)?", handleMethodNotAllowed);
-app.patch("/api/properties/(*)?", handleMethodNotAllowed);
-app.all("*", handleBadRequest);
-app.all("/api/(*)?", handleMethodNotAllowed);
+
+// invalid enpoint //
+app.all("*", handleInvalidEndpoint);
+
+// error middleware //
+app.use("*", handleBadRequest, handleNotFound )
+
+
+// app.use("/api/properties", handleMethodNotAllowed);
 
 
 module.exports = app;
