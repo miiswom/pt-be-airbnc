@@ -11,7 +11,6 @@ exports.getProperties = (req, res, next) => {
       res.status(200).json({ properties })
     })
     .catch((err) => {
-      console.log(err)
       next(err)
     })
 
@@ -28,8 +27,6 @@ exports.postNewFavourite = (req, res, next) => {
       res.status(201).json({ msg: 'Property favourited successfully.', favourite_id: favourite.favourite_id })
     })
     .catch((err) => {
-      console.log("2")
-      console.log(err)
       next(err)
     })
 }
@@ -43,18 +40,19 @@ exports.deleteFavourite = (req, res, next) => {
       }
       res.status(204).json({})
     }).catch((err) => {
-      console.log("2")
       next(err)
     })
 };
 
-exports.getPropertyById = async (req, res, next) => {
+exports.getPropertyById = (req, res, next) => {
   const { id } = req.params;
-  fetchPropertyById(req, res, id).then((property) => {
+  fetchPropertyById(id).then((property) => {
     if (!property) {
       next(err)
+    } else {
+      res.status(200).json(property)
+
     }
-    res.status(200).json({ property: property })
   }).catch((err) => {
     next(err)
   })
@@ -71,7 +69,6 @@ exports.getPropertyReview = async (req, res, next) => {
       res.status(200).json({ reviews, average_rating })
     }
   } catch (err) {
-    console.log("2")
     next(err)
   }
 };
@@ -117,11 +114,9 @@ exports.getUserById = (req, res, next) => {
 
 exports.patchUser = (req, res, next) => {
 const { first_name, surname, email, phone, avatar } = req.body
-console.log(req.body)
 const { id } = req.params
 updateUser(id, first_name, surname, email, phone, avatar)
 .then((user) => {
-  console.log(user)
   res.status(200).json(user)
 }).catch((err) => {
   next(err)

@@ -100,8 +100,6 @@ exports.createFavourite = async (guest_id, id) => {
     return Promise.reject({ status: 400, msg: 'Sorry, bad request.' })
   }
   if (guest_id === 0 || guest_id > 6) {
-    console.log("1")
-
     return Promise.reject({ status: 404, msg: 'Sorry, not found.' })
   }
   return db
@@ -135,12 +133,12 @@ exports.removeFavourite = (id) => {
 
 exports.fetchPropertyById = async (id) => {
   if (Number(id) > await validPropertyIds()) {
-    console.log("1")
     return Promise.reject({ status: 404 })
   }
-  if (!Number(id) > 0) {
+  if (Number(id) === NaN) {
     return Promise.reject({ status: 400 })
   }
+
   return db
     .query(format(`SELECT properties.property_id, 
                         properties.name AS property_name, 
@@ -158,10 +156,11 @@ exports.fetchPropertyById = async (id) => {
                     WHERE properties.property_id = (%L)
                     GROUP BY properties.property_id, users.first_name, users.surname, users.avatar`, [id]))
     .then(({ rows }) => {
+      console.log("hhere")
+
       if (rows.length === 0) {
         return Promise.reject({ status: 404 })
-      }
-      else {
+      } else {
         return rows[0]
       }
     }
@@ -184,7 +183,6 @@ exports.fetchPropertyReviews = (id) => {
                       WHERE review_id = %L`, [id]))
     .then(({ rows }) => {
       if (rows.length === 0) {
-        console.log("1")
         return Promise.reject({ status: 404 })
       } else {
         return rows
