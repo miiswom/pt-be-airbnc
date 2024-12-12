@@ -50,7 +50,7 @@ exports.getPropertyById = (req, res, next) => {
     if (!property) {
       next(err)
     } else {
-      res.status(200).json(property)
+      res.status(200).json({property})
 
     }
   }).catch((err) => {
@@ -117,7 +117,7 @@ const { first_name, surname, email, phone, avatar } = req.body
 const { id } = req.params
 updateUser(id, first_name, surname, email, phone, avatar)
 .then((user) => {
-  res.status(200).json(user)
+  res.status(200).json({user})
 }).catch((err) => {
   next(err)
 })

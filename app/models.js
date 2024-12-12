@@ -1,8 +1,8 @@
 const db = require("../db/connection");
 const format = require("pg-format");
-const numOfProperties = async () => (await this.validPropertyIds()).length
-const numOfReviews = async () => (await this.fetchPropertyReviews()).length
-const numOfGuest = async () => (await this.fetchGuests()).length;
+// const numOfProperties = async () => (await this.validPropertyIds()).length
+// const numOfReviews = async () => (await this.fetchPropertyReviews()).length
+// const numOfGuest = async () => (await this.fetchGuests()).length;
 
 const validPropertyIds = async () => {
   return db.query(`SELECT property_id FROM properties`)
@@ -156,8 +156,6 @@ exports.fetchPropertyById = async (id) => {
                     WHERE properties.property_id = (%L)
                     GROUP BY properties.property_id, users.first_name, users.surname, users.avatar`, [id]))
     .then(({ rows }) => {
-      console.log("hhere")
-
       if (rows.length === 0) {
         return Promise.reject({ status: 404 })
       } else {
@@ -203,8 +201,7 @@ exports.calcAverageRating = async (obj) => {
 
 exports.fetchGuests = () => {
   return db.query(`SELECT user_id FROM users`).then(({ rows }) => { return rows })
-}
-
+};
 
 exports.createReview = async (id, guest_id, rating, comment) => {
 
@@ -257,28 +254,48 @@ exports.fetchUserById = async (id) => {
                           )
 };
 
-exports.updateUser = (id, first_name, surname, email, phone, avatar) => {
+exports.updateUser = (id, first_name, surname, email, phone_number, avatar) => {
   const values = [];
-  // let queryStr = `UPDATE users SET`;
-  // let userId = ` WHERE user_id= $1`
+  let valuesCount = 0;
+  let queryStr = `UPDATE users SET`;
+  let updateSets = []
+
   if(id) {
     values.push(id);
+    valuesCount++
   }
   if(first_name) {
     values.push(first_name);
+    valuesCount++;
+    updateSets.push(` first_name= $${valuesCount}`);
+  };
+  
+  if(surname) {
+    values.push(surname);
+    valuesCount++
+    updateSets.push(` surname= $${valuesCount}`);
   };
 
-  console.log(values)
+  if(email) {
+    values.push(email);
+    valuesCount++
+    updateSets.push(` email= $${valuesCount}`);
+  };
 
-  // // if(surname) values.push(surname);
-  // // if(email) values.push(email);
-  // // if(phone) values.push(phone);
-  // // if(avatar) values.push(avatar);
-  // console.log(queryStr + userId + ` RETURNING *;`, values, [id])
-  return db.query(`UPDATE users SET first_name= $2 WHERE user_id= $1 RETURNING *;`, values)
+  if(phone_number) {
+    values.push(phone_number);
+    valuesCount++
+    updateSets.push(` phone_number= $${valuesCount}`);
+  };
+
+  if(avatar) {
+    values.push(avatar);
+    valuesCount++
+    updateSets.push(`avatar= $${valuesCount}`);
+  };
+
+  return db.query(queryStr + updateSets.join(",") + ` WHERE user_id= $1 RETURNING user_id, first_name, surname, email, phone_number AS phone, avatar, created_at;`, values)
   .then(({rows}) => { 
-    // values.push(rows[0].user_id)
-    // return db.query(`UPDATE users SET first_name`)
     return rows[0]
   }
 )
