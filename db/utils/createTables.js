@@ -6,12 +6,17 @@ exports.createUsers = async() => {
   await db.query(`CREATE TABLE users ( 
                     user_id SERIAL PRIMARY KEY,
                       first_name VARCHAR NOT NULL,
+                        CONSTRAINT ch_first_name CHECK(REGEXP_LIKE(first_name, '[a-zA-Z]')),
                       surname VARCHAR NOT NULL,
+                        CONSTRAINT ch_surname CHECK(REGEXP_LIKE(surname, '[a-zA-Z]')),
                       email VARCHAR NOT NULL,
+                        CONSTRAINT ch_email CHECK(REGEXP_LIKE(email, '^[a-zA-Z._0-9-]+@[a-z]+.(co(m|.uk)|net|fr)$')),
                       phone_number VARCHAR,
+                        CONSTRAINT ch_phone_number CHECK(REGEXP_LIKE(phone_number, '[0-9]')),
                       role VARCHAR,
-                      CONSTRAINT chk_role CHECK (role IN ('host', 'guest')),
-                      avatar VARCHAR,
+                        CONSTRAINT chk_role CHECK (role IN ('host', 'guest')),
+                      avatar VARCHAR,                        
+                        CONSTRAINT ch_avatar CHECK(REGEXP_LIKE(avatar, '^http(s)?:\/\/(www.)?[.a-z_0-9\/]+.(co(m|uk)|net|fr)([.@?=#a-z_0-9\/-]+)?')),
                       created_at text DEFAULT TO_CHAR(CURRENT_TIMESTAMP,'DD/MM/YYYY - HH24:MI:SS') ) ;`)
 };
 

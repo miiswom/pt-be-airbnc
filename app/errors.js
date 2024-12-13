@@ -23,7 +23,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 };
 
 exports.handleBadRequest = (err, req, res, next) => {
-  if(err.code === "22P02" || err.status === 400) {
+  if(err.code === "22P02" || err.code === "23514" ||err.status === 400) {
     res.status(400).json({msg: 'Sorry, bad request.'})
   }else {
     next(err)

@@ -259,7 +259,6 @@ exports.updateUser = (id, first_name, surname, email, phone_number, avatar) => {
   let valuesCount = 0;
   let queryStr = `UPDATE users SET`;
   let updateSets = []
-
   if(id) {
     values.push(id);
     valuesCount++
@@ -296,7 +295,11 @@ exports.updateUser = (id, first_name, surname, email, phone_number, avatar) => {
 
   return db.query(queryStr + updateSets.join(",") + ` WHERE user_id= $1 RETURNING user_id, first_name, surname, email, phone_number AS phone, avatar, created_at;`, values)
   .then(({rows}) => { 
-    return rows[0]
-  }
-)
-}
+    if(rows.length === 0) {
+      return Promise.reject({status: 404})
+    } else {
+      return rows[0]
+    }}
+  ).catch((err) => {
+    return Promise.reject(err)
+  })}

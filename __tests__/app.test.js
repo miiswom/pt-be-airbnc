@@ -522,8 +522,8 @@ describe("GET USER", () => {
   })
 });
 
-describe.only("PATCH USER", () => {
-  describe.only("PATCH /api/users/:id with 1 key", () => {
+describe("PATCH USER", () => {
+  describe("PATCH /api/users/:id with 1 valid key", () => {
     test("200 - when patching first_name only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({body: {user}}) => { return user })
       const res = await request(app).patch('/api/users/1').send(
@@ -572,7 +572,7 @@ describe.only("PATCH USER", () => {
       expect(user.phone).toEqual(formerUser.phone_number)
       expect(user.avatar).toEqual(formerUser.avatar)
     }); 
-    test("200 - when patching surname only", async () => {
+    test("200 - when patching phone only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({body: {user}}) => { return user })
       const res = await request(app).patch('/api/users/1').send(
         {
@@ -606,20 +606,20 @@ describe.only("PATCH USER", () => {
     }); 
   });
 
-  describe("PATCH /api/users/:id with 2 keys", () => {
+  describe("PATCH /api/users/:id with 2 valid keys", () => {
     test("200 - when patching first_name and avatar only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({body: {user}}) => { return user })
       const res = await request(app).patch('/api/users/1').send(
         {
           "first_name": "TestA",
-          "avatar" : "www.testd.com"
+          "avatar" :"http://www.testd.com"
           }
       )
       const { body: {user}} = res;
       expect(user.first_name).not.toEqual(formerUser.first_name);
       expect(user.avatar).not.toEqual(formerUser.avatar)
       expect(user.first_name).toBe('TestA');
-      expect(user.avatar).toEqual('www.testd.com')
+      expect(user.avatar).toEqual('http://www.testd.com')
       expect(user.user_id).toEqual(formerUser.user_id)
       expect(user.surname).toEqual(formerUser.surname);
       expect(user.email).toEqual(formerUser.email)
@@ -627,7 +627,7 @@ describe.only("PATCH USER", () => {
     });  
   });
 
-  describe("PATCH /api/users/:id with 3 keys", () => {
+  describe("PATCH /api/users/:id with 3 valid keys", () => {
     test("200 - when patching email, surname and phone only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({body: {user}}) => { return user })
       const res = await request(app).patch('/api/users/1').send(
@@ -652,12 +652,12 @@ describe.only("PATCH USER", () => {
     });  
   });
 
-  describe("PATCH /api/users/:id with 4 keys", () => {
+  describe("PATCH /api/users/:id with 4 valid keys", () => {
     test("200 - when patching avatar, email, surname and phone only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({body: {user}}) => { return user })
       const res = await request(app).patch('/api/users/1').send(
         {
-          "avatar": "www.testingavatar.com",
+          "avatar": "http://www.testingavatar.com",
           "surname": "surnameTest",
           "email" : "testing@example.com",
           "phone": "06123456789"
@@ -672,14 +672,14 @@ describe.only("PATCH USER", () => {
       expect(user.surname).toBe('surnameTest');
       expect(user.email).toBe('testing@example.com')
       expect(user.phone).toBe('06123456789');
-      expect(user.avatar).toBe('www.testingavatar.com')
+      expect(user.avatar).toBe('http://www.testingavatar.com')
 
       expect(user.user_id).toBe(formerUser.user_id)
       expect(user.first_name).toBe(formerUser.first_name);
     });  
   });
 
-  describe("PATCH /api/users/:id with 5 keys", () => {
+  describe("PATCH /api/users/:id with 5 valid keys", () => {
     test("200 - responds with an updated user object containing all properties", async () => {
       const res = await request(app).patch('/api/users/1').send(
         {
@@ -687,7 +687,7 @@ describe.only("PATCH USER", () => {
           "surname": "TestB",
           "email": "testC@example.com",
           "phone": "06123456789",
-          "avatar" : "www.testd.com"
+          "avatar" : "http://www.testingavatar.com"
           }
       )
       const { body: {user}} = res;
@@ -702,7 +702,7 @@ describe.only("PATCH USER", () => {
           "surname": "TestB",
           "email": "testC@example.com",
           "phone": "06123456789",
-          "avatar" : "www.testd.com"
+          "avatar" : "http://www.testingavatar.com"
           }
       )
       const { body: {user}} = res;
@@ -710,7 +710,128 @@ describe.only("PATCH USER", () => {
       expect(user.surname).toBe('TestB')
       expect(user.email).toBe('testC@example.com')
       expect(user.phone).toBe('06123456789')
-      expect(user.avatar).toBe('www.testd.com')
+      expect(user.avatar).toBe('http://www.testingavatar.com')
     });
   });
+
+  //////////////////////////////////
+
+  describe("PATCH /api/users/:unavailable_id", () => {
+    test("404 - responds with an object containing a message 'Sorry, not found.'", async () => {
+      const res = await request(app).patch('/api/users/23').send(
+        {
+          "first_name": "TestA",
+          "surname": "TestB",
+          "email": "testC@example.com",
+          "phone": "06123456789",
+          "avatar" : "http://www.testingavatar.com"
+        })
+      const {body: {msg}} = res;
+      expect(res.status).toBe(404)
+      expect(msg).toBe('Sorry, not found.')
+    })
+  })
+
+  describe("PATCH /api/users/:invalid_id", () => {
+    test("400 - responds with an object containing a message 'Sorry, bad request'", async () => {
+      const res = await request(app).patch('/api/users/abcddk').send(
+        {
+          "first_name": "TestA",
+          "surname": "TestB",
+          "email": "testC@example.com",
+          "phone": "06123456789",
+          "avatar" : "www.testd.com"
+        })
+      const {body: {msg}} = res;
+      expect(res.status).toBe(400)
+      expect(msg).toBe('Sorry, bad request.')
+    })
+  });
+
+  describe("INVALID METHODS /api/users/:id", () => {
+    test("405 - responds with an object containing a message 'Sorry, method not allowed'", async () => {
+      const methods = ['delete', 'put', 'post']
+      for (const method of methods) {
+        const res = await request(app)[method]('/api/users/1').send(
+          {
+            "first_name": "TestA",
+            "surname": "TestB",
+            "email": "testC@example.com",
+            "phone": "06123456789",
+            "avatar" : "www.testd.com"
+          })
+        const { body: { msg }} = res;
+        expect(res.status).toBe(405);
+        expect(msg).toBe('Sorry, method not allowed.')
+      }
+    })
+  });
+
+  describe("PATCH /api/user/:id [invalid endpoint]", () => {
+    test("400 - responds with an object containing a message 'Sorry, invalid endpoint.", async () => {
+      const res = await request(app).patch('/api/user/1').send({
+        "first_name": "TestA",
+        "surname": "TestB",
+        "email": "testC@example.com",
+        "phone": "06123456789",
+        "avatar" : "http://www.testingavatar.com"
+      })
+      const {body: {msg}} = res;
+      expect(res.status).toBe(404)
+      expect(msg).toBe('Sorry, invalid endpoint.')
+    })
+  });
+
+  describe("PATCH /api/users/:id [invalid keys]", () => {
+    describe("400 - Invalid typeof character passed responds with an object containing a message 'Sorry, bad request.", () => {
+      test("400 - INVALID first_name ", async () => {
+        const res = await request(app).patch('/api/users/1').send({
+          "first_name": "06123456789"
+        })
+        const {body: {msg}} = res;
+        expect(res.status).toBe(400)
+        expect(msg).toBe('Sorry, bad request.')
+      })
+
+      test("400 - INVALID surname", async () => {
+        const res = await request(app).patch('/api/users/1').send({
+          "surname": "06123456789"
+        })
+        const {body: {msg}} = res;
+        expect(res.status).toBe(400)
+        expect(msg).toBe('Sorry, bad request.')
+      })
+
+      test("400 - INVALID email.", async () => {
+        const res = await request(app).patch('/api/users/1').send({
+          "email": "tes.com"
+        })
+        const {body: {msg}} = res;
+        expect(res.status).toBe(400)
+        expect(msg).toBe('Sorry, bad request.')
+      })
+
+      test("400 - INVALID phone.", async () => {
+        const res = await request(app).patch('/api/users/1').send({
+          "first_name": "Oakley",
+          "phone": "Barbara"
+        })
+        const {body: {msg}} = res;
+        expect(res.status).toBe(400)
+        expect(msg).toBe('Sorry, bad request.')
+      })
+
+      test("400 - INVALID avatar", async () => {
+        const res = await request(app).patch('/api/users/1').send({
+          "first_name": "Oakley",
+          "phone": "01123456789",
+          "avatar": "random"
+        })
+        const {body: {msg}} = res;
+        expect(res.status).toBe(400)
+        expect(msg).toBe('Sorry, bad request.')
+      })
+    })
+
+  });  
 })

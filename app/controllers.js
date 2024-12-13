@@ -117,8 +117,9 @@ const { first_name, surname, email, phone, avatar } = req.body
 const { id } = req.params
 updateUser(id, first_name, surname, email, phone, avatar)
 .then((user) => {
-  res.status(200).json({user})
+    res.status(200).json({user})
 }).catch((err) => {
+  //console.log(err)
   next(err)
 })
 }
