@@ -6,8 +6,9 @@ exports.handleInvalidEndpoint = (req, res) => {
 res.status(404).json({msg: 'Sorry, invalid endpoint.'})
 };
 
+// err.code 23503 means isn't available in the table
 exports.handleNotFound = (err, req, res, next) => {
-  if(err.code === "22003" || err.status === 404 ) {
+  if(err.code === "22003" || err.code === "23503" ||err.status === 404 ) {
     res.status(404).json({msg: 'Sorry, not found.'})
   } else {
     next(err)
@@ -22,6 +23,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
   }
 };
 
+// err.code 23514 means wrong typeof 
 exports.handleBadRequest = (err, req, res, next) => {
   if(err.code === "22P02" || err.code === "23514" ||err.status === 400) {
     res.status(400).json({msg: 'Sorry, bad request.'})

@@ -9,7 +9,7 @@ app.use(express.json());
 app.get("/api/properties", getProperties);
 app.get("/api/properties/:id", getPropertyById)
 app.post("/api/properties/:id/favourite", postNewFavourite);
-app.get("/api/properties/:id/reviews", getPropertyReview);
+app.get("/api/properties/:id/reviews",getPropertyReview);
 app.post("/api/properties/:id/reviews", postNewReview);
 app.all("/api/properties/?(*)?", handleMethodNotAllowed);
 

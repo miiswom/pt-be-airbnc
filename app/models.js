@@ -1,30 +1,5 @@
 const db = require("../db/connection");
 const format = require("pg-format");
-// const numOfProperties = async () => (await this.validPropertyIds()).length
-// const numOfReviews = async () => (await this.fetchPropertyReviews()).length
-// const numOfGuest = async () => (await this.fetchGuests()).length;
-
-const validPropertyIds = async () => {
-  return db.query(`SELECT property_id FROM properties`)
-    .then(({ rows }) => {
-      const ids = []
-      rows.forEach((row) => {
-        ids.push(row.property_id)
-      })
-      return ids
-    }).catch((err) => { console.log(err) })
-};
-
-const validUsersIds = async () => {
-  return db.query(`SELECT user_id FROM users`)
-    .then(({ rows }) => {
-      const ids = []
-      rows.forEach((row) => {
-        ids.push(row.user_id)
-      })
-      return ids
-    }).catch((err) => { console.log(err) })
-};
 
 exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
   let queryStr = `SELECT  favourites.property_id,
@@ -92,35 +67,34 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
 
 exports.fetchFavourites = () => {
   return db.query(`SELECT * FROM favourites`)
-    .then(({ rows }) => { return rows })
-};
-
-exports.createFavourite = async (guest_id, id) => {
-  if (Number(id) === NaN || Number(guest_id) === NaN) {
-    return Promise.reject({ status: 400, msg: 'Sorry, bad request.' })
-  }
-  if (guest_id === 0 || guest_id > 6) {
-    return Promise.reject({ status: 404, msg: 'Sorry, not found.' })
-  }
-  return db
-    .query(format(`INSERT INTO favourites(guest_id, property_id) VALUES (%L) RETURNING *`, [guest_id, id]))
-    .then(({ rows }) => {
-      if (rows.length === 0) {
-        return Promise.reject({ status: 404, msg: 'Sorry, not found.' })
-
-      } else {
-        return rows[0]
-      }
+    .then(({ rows }) => { 
+      return rows 
     })
 };
 
-exports.removeFavourite = (id) => {
-  if (Number(id) === NaN) {
-    return Promise.reject({ status: 400 })
+exports.createFavourite = async (id, guest_id) => {
+  const values = [];
+
+  if(id) {
+    values.push(id)
+  }
+  if(guest_id) {
+    values.push(guest_id)
+  }
+    return db.query(`INSERT INTO favourites(guest_id, property_id) VALUES ($1, $2) RETURNING *`, values)
+    .then(({rows}) => {
+      if (rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Sorry, not found.' })
+      } else {
+        return rows[0]
+      }
+    }).catch((err) => {
+      return Promise.reject(err)
+    })
   }
 
-  return db
-    .query(format(`DELETE FROM favourites WHERE favourite_id = (%L) RETURNING *`, [id]))
+exports.removeFavourite = (id) => {
+  return db.query(format(`DELETE FROM favourites WHERE favourite_id = (%L) RETURNING *`, [id]))
     .then(({ rows }) => {
 
       if (rows.length === 0) {
@@ -128,19 +102,13 @@ exports.removeFavourite = (id) => {
       } else {
         return rows[0]
       }
+    }).catch((err) => {
+      return Promise.reject(err)
     })
 };
 
 exports.fetchPropertyById = async (id) => {
-  if (Number(id) > await validPropertyIds()) {
-    return Promise.reject({ status: 404 })
-  }
-  if (Number(id) === NaN) {
-    return Promise.reject({ status: 400 })
-  }
-
-  return db
-    .query(format(`SELECT properties.property_id, 
+  return db.query(format(`SELECT properties.property_id, 
                         properties.name AS property_name, 
                         location, 
                         price_per_night, 
@@ -162,13 +130,12 @@ exports.fetchPropertyById = async (id) => {
         return rows[0]
       }
     }
-    )
+    ).catch((err) => {
+      return Promise.reject(err)
+    })
 };
 
 exports.fetchPropertyReviews = (id) => {
-  if (Number(id) === NaN) {
-    return Promise.reject({ status: 400 })
-  }
   return db.query(format(`SELECT review_id,
                           comment,
                           rating,
@@ -185,6 +152,8 @@ exports.fetchPropertyReviews = (id) => {
       } else {
         return rows
       }
+    }).catch((err) => {
+      return Promise.reject(err)
     })
 };
 
@@ -204,19 +173,18 @@ exports.fetchGuests = () => {
 };
 
 exports.createReview = async (id, guest_id, rating, comment) => {
-
-  if (Number(id) === NaN || Number(guest_id) === NaN || Number(rating) === NaN) {
-    return Promise.reject({ status: 400 })
-  }
-  if (id === 0 || (Number(id) > 0 && !(await validPropertyIds()).includes(Number(id))) || guest_id > await numOfGuest()) {
-    return Promise.reject({ status: 404 })
-  } 
     return db.query(format(`INSERT INTO reviews( property_id,
       guest_id,
       rating,
       comment) VALUES (%L) RETURNING *`, [id, guest_id, rating, comment]))
       .then(({ rows }) => {
-        return rows[0]
+        if(rows.length === 0) {
+          return Promise.reject({status: 404})
+        } else {
+          return rows[0]
+        }
+      }).catch((err) => {
+        return Promise.reject(err)
       })
 };
 

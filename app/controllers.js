@@ -19,7 +19,7 @@ exports.getProperties = (req, res, next) => {
 exports.postNewFavourite = (req, res, next) => {
   const { guest_id } = req.body;
   const { id } = req.params;
-  createFavourite(guest_id, id)
+  createFavourite(id, guest_id)
     .then((favourite) => {
       if (!favourite) {
         next(err)
@@ -27,6 +27,7 @@ exports.postNewFavourite = (req, res, next) => {
       res.status(201).json({ msg: 'Property favourited successfully.', favourite_id: favourite.favourite_id })
     })
     .catch((err) => {
+
       next(err)
     })
 }
@@ -51,7 +52,6 @@ exports.getPropertyById = (req, res, next) => {
       next(err)
     } else {
       res.status(200).json({property})
-
     }
   }).catch((err) => {
     next(err)
@@ -59,7 +59,7 @@ exports.getPropertyById = (req, res, next) => {
 };
 
 exports.getPropertyReview = async (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.params;
   try {
     const reviews = await fetchPropertyReviews(id);
     const average_rating = await calcAverageRating(reviews);
