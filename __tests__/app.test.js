@@ -217,7 +217,7 @@ describe("DELETE FAVOURITE", () => {
   })
 });
 
-describe.only("GET PROPERTY", () => {
+describe("GET PROPERTY", () => {
   describe("GET /api/properties/:id", () => {
     test("200 - property objects should contains keys of 'property_id', 'property_name', 'location', 'price_per_night', 'description', 'host', 'host_avatar' and 'favourite_count'", async () => {
       const res = await request(app).get('/api/properties/1');
