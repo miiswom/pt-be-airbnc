@@ -83,3 +83,18 @@ exports.insertFavourites = () => {
                                                   property_id) VALUES %L RETURNING *;`, formattedFavourites))
     .then(({ rows }) => { return rows });
 };
+
+exports.insertImages = () => {
+  const images = require("../data/test/images.json")
+  const formattedImages = images.map((image, i) => [
+    image.image_id = i+1,
+    image.property_id = getPropId(image.property_name),
+    image.image_url,
+    image.alt_text = image.alt_tag
+  ])
+  return db.query(format(`INSERT INTO images(  image_id, 
+                                        property_id,
+                                        image_url,
+                                        alt_text) VALUES %L RETURNING *;`, formattedImages))
+            .then(({rows}) => { return rows})
+};

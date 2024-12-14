@@ -16,7 +16,7 @@ exports.createUsers = async() => {
                       role VARCHAR,
                         CONSTRAINT chk_role CHECK (role IN ('host', 'guest')),
                       avatar VARCHAR,                        
-                        CONSTRAINT ch_avatar CHECK(REGEXP_LIKE(avatar, '^http(s)?:\/\/(www.)?[.a-z_0-9\/]+.(co(m|uk)|net|fr)([.@?=#a-z_0-9\/-]+)?')),
+                        CONSTRAINT ch_avatar CHECK(REGEXP_LIKE(avatar, '^(http(s)?:\/\/(www.)?)?[-_.a-z0-9\/]+.(jpeg|png|jpg)$')),
                       created_at text DEFAULT TO_CHAR(CURRENT_TIMESTAMP,'DD/MM/YYYY - HH24:MI:SS') ) ;`)
 };
 
@@ -58,4 +58,12 @@ exports.createFavourites = async() => {
                     guest_id INTEGER NOT NULL REFERENCES users(user_id),
                     property_id INTEGER NOT NULL REFERENCES properties(property_id) );`)
 };
+
+exports.createImages = async() => {
+  await db.query(`DROP TABLE IF EXISTS images CASCADE;`)
+  await db.query(`CREATE TABLE images(  image_id SERIAL PRIMARY KEY,
+                                        property_id INT REFERENCES properties(property_id) NOT NULL,
+                                        image_url VARCHAR NOT NULL,
+                                        alt_text VARCHAR NOT NULL);`)
+}
 
