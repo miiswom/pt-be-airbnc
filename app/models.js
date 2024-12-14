@@ -6,12 +6,15 @@ exports.fetchProperties = (maxprice, minprice, sort, order, host) => {
                           properties.name AS property_name,
                           location,
                           price_per_night,
-                          CONCAT(first_name, ' ', surname) AS host
+                          CONCAT(first_name, ' ', surname) AS host,
+                          image_url AS image
                     FROM properties
                     JOIN users
                     ON properties.host_id = users.user_id
                     JOIN favourites
-                    ON properties.property_id = favourites.property_id`;
+                    ON properties.property_id = favourites.property_id
+                    JOIN images
+                    ON properties.property_id = images.property_id`;
   const defaultSort = ` ORDER BY favourites.property_id`;
   const defaultOrder = ` ASC`;
   const validSortKeys = ['property_id', 'property_name', 'location', 'price_per_night', 'host'];
@@ -108,21 +111,24 @@ exports.removeFavourite = (id) => {
 };
 
 exports.fetchPropertyById = async (id) => {
-  return db.query(format(`SELECT properties.property_id, 
+  return db.query(`SELECT properties.property_id, 
                         properties.name AS property_name, 
                         location, 
                         price_per_night, 
                         description, 
                         CONCAT(first_name, ' ', surname) AS host,
                         avatar AS host_avatar,
-                        COUNT(favourites.property_id) AS favourite_count
+                        COUNT(favourites.property_id) AS favourite_count,
+                        ARRAY(SELECT image_url FROM images WHERE property_id = $1) AS images
                     FROM properties
                       JOIN users
                         ON properties.host_id = users.user_id
                       JOIN favourites
                         ON properties.property_id = favourites.property_id
-                    WHERE properties.property_id = (%L)
-                    GROUP BY properties.property_id, users.first_name, users.surname, users.avatar`, [id]))
+                      JOIN images
+                        ON properties.property_id = images.property_id
+                    WHERE properties.property_id = $1
+                    GROUP BY properties.property_id, users.first_name, users.surname, users.avatar, image_url`, [id])
     .then(({ rows }) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404 })

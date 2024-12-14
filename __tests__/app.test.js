@@ -29,7 +29,7 @@ describe("GET PROPERTIES", () => {
       const res = await request(app).get('/api/properties');
       const { body: { properties } } = res;
       properties.forEach((property) => {
-        expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'host'])
+        expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'host', 'image'])
       })
     });
 
@@ -217,13 +217,13 @@ describe("DELETE FAVOURITE", () => {
   })
 });
 
-describe("GET PROPERTY", () => {
+describe.only("GET PROPERTY", () => {
   describe("GET /api/properties/:id", () => {
     test("200 - property objects should contains keys of 'property_id', 'property_name', 'location', 'price_per_night', 'description', 'host', 'host_avatar' and 'favourite_count'", async () => {
       const res = await request(app).get('/api/properties/1');
       const { body: { property } } = res;
       expect(res.status).toBe(200)
-      expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'description', 'host', 'host_avatar', 'favourite_count'])
+      expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'description', 'host', 'host_avatar', 'favourite_count', 'images'])
     });
   });
   
