@@ -1,5 +1,5 @@
 const express = require("express");
-const { deleteReview } = require("../controllers");
+const { deleteReview } = require("../controllers/reviews.controllers");
 const { handleMethodNotAllowed } = require("../errors")
 const reviewsRouter = express.Router();
 

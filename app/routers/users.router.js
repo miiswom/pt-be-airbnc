@@ -1,6 +1,6 @@
 const express = require("express");
-const { getUserById, patchUser } = require("../controllers");
-const { handleMethodNotAllowed } = require("../errors")
+const { getUserById, patchUser } = require("../controllers/users.controllers");
+const { handleMethodNotAllowed } = require("../")
 const usersRouter = express.Router()
 
 // users router //

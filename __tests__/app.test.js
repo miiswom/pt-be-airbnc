@@ -14,7 +14,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe("GET PROPERTIES", () => {
+describe.only("GET PROPERTIES", () => {
   describe("GET /api/properties", () => {
     test("200 - it should respond with an array of property objects", async () => {
       return request(app).get('/api/properties')

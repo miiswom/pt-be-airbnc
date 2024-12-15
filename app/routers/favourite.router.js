@@ -1,6 +1,6 @@
-const express = require("express")
+const express = require("express");
+const { deleteFavourite } = require("../controllers/favourites.controllers");
 const favouriteRouter = express.Router();
-const { deleteFavourite } = require("../controllers");
 
 // favourite router //
 favouriteRouter

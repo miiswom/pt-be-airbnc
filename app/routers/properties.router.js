@@ -1,5 +1,7 @@
 const express = require("express");
-const {getProperties, getPropertyById, postNewFavourite, getPropertyReview, postNewReview } = require("../controllers")
+const {getProperties, getPropertyById, getPropertyReview } = require("../controllers/properties.controllers");
+const { postNewFavourite } = require("../controllers/favourites.controllers");
+const { postNewReview } = require("../controllers/reviews.controllers")
 const { handleMethodNotAllowed } = require("../errors");
 const propertiesRouter = express.Router();
 
