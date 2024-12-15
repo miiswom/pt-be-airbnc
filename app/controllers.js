@@ -1,4 +1,4 @@
-const { fetchProperties, fetchPropertyById, createFavourite, removeFavourite, fetchPropertyReviews, calcAverageRating, createReview, removeReview, fetchUserById, updateUser } = require("./models");
+const { fetchProperties, fetchPropertyById, createFavourite, removeFavourite, fetchPropertyReviews, calcAverageRating, createReview, removeReview, fetchUserById, updateUser } = require("./models/models");
 
 exports.getProperties = (req, res, next) => {
   const { maxprice, minprice, sort, order, host } = req.query
@@ -7,7 +7,7 @@ exports.getProperties = (req, res, next) => {
       if (!properties) {
         next(err)
       }
-      res.status(200).json({ properties })
+      res.status(200).json({properties})
     })
     .catch((err) => {
       next(err)

@@ -7,8 +7,9 @@ res.status(404).json({msg: 'Sorry, invalid endpoint.'})
 };
 
 // err.code 23503 means couldn't find data in the table
+// err.code 42703 means column does not exist
 exports.handleNotFound = (err, req, res, next) => {
-  if(err.code === "22003" || err.code === "23503" ||err.status === 404 ) {
+  if(err.code === "22003" || err.code === "23503" || err.code === '42703' ||err.status === 404 ) {
     res.status(404).json({msg: 'Sorry, not found.'})
   } else {
     next(err)
