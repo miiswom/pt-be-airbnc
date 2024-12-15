@@ -1,8 +1,8 @@
 const request = require("supertest");
-const app = require("../app/app");
-const db = require("../db/connection")
-const { seed } = require("../db/seed");
-const data = require("../db/data/test");
+const app = require("../../app/app");
+const db = require("../../db/connection")
+const { seed } = require("../../db/seed");
+const data = require("../../db/data/test");
 
 beforeEach(() => {
   return seed(data);
@@ -12,8 +12,25 @@ afterAll(() => {
   return db.end();
 });
 
+describe("INVALID METHODS /api/users/:id", () => {
+  test("405 - responds with an object containing a message 'Sorry, method not allowed'", async () => {
+    const methods = ['delete', 'put', 'post']
+    for (const method of methods) {
+      const res = await request(app)[method]('/api/users/1').send(
+        {
+          "first_name": "TestA",
+          "surname": "TestB",
+          "email": "testC@example.com",
+          "phone": "06123456789",
+          "avatar": "www.testd.com"
+        })
+      const { body: { msg } } = res;
+      expect(res.status).toBe(405);
+      expect(msg).toBe('Sorry, method not allowed.')
+    }
+  })
+});
 
-describe("PATCH USER", () => {
   describe("PATCH /api/users/:id with 1 valid key", () => {
     test("200 - when patching first_name only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
@@ -239,25 +256,6 @@ describe("PATCH USER", () => {
     })
   });
 
-  describe("INVALID METHODS /api/users/:id", () => {
-    test("405 - responds with an object containing a message 'Sorry, method not allowed'", async () => {
-      const methods = ['delete', 'put', 'post']
-      for (const method of methods) {
-        const res = await request(app)[method]('/api/users/1').send(
-          {
-            "first_name": "TestA",
-            "surname": "TestB",
-            "email": "testC@example.com",
-            "phone": "06123456789",
-            "avatar": "www.testd.com"
-          })
-        const { body: { msg } } = res;
-        expect(res.status).toBe(405);
-        expect(msg).toBe('Sorry, method not allowed.')
-      }
-    })
-  });
-
   describe("PATCH /api/user/:id [invalid endpoint]", () => {
     test("400 - responds with an object containing a message 'Sorry, invalid endpoint.", async () => {
       const res = await request(app).patch('/api/user/1').send({
@@ -273,8 +271,8 @@ describe("PATCH USER", () => {
     })
   });
 
-  describe("PATCH /api/users/:id [invalid keys]", () => {
-    describe("400 - Invalid typeof character passed responds with an object containing a message 'Sorry, bad request.", () => {
+  describe("PATCH /api/users/:id [invalid typeof keys]", () => {
+    describe("400 - responds with an object containing a message 'Sorry, bad request.", () => {
       test("400 - INVALID first_name ", async () => {
         const res = await request(app).patch('/api/users/1').send({
           "first_name": "06123456789"
@@ -324,4 +322,3 @@ describe("PATCH USER", () => {
       })
     })
   });
-});
