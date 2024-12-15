@@ -65,5 +65,16 @@ exports.createImages = async() => {
                                         property_id INT REFERENCES properties(property_id) NOT NULL,
                                         image_url VARCHAR NOT NULL,
                                         alt_text VARCHAR NOT NULL);`)
+};
+
+exports.createBookings = async() => {
+  await db.query(`DROP TABLE IF EXISTS bookings CASCADE;`);
+  await db.query(`CREATE TABLE bookings(  booking_id SERIAL PRIMARY KEY,
+                                          property_id INT NOT NULL REFERENCES properties(property_id),
+                                          guest_id INT NOT NULL REFERENCES users(user_id),
+                                          check_in_date DATE NOT NULL,
+                                          check_out_date DATE NOT NULL,
+                                          created_at text DEFAULT TO_CHAR(CURRENT_TIMESTAMP,'DD/MM/YYYY - HH24:MI:SS'));`)
+
 }
 

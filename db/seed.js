@@ -1,5 +1,5 @@
-const { createUsers, createProperties, createReviews, createPropertyTypes, createFavourites, createImages } = require("./utils/createTables");
-const { insertUser, insertPropertyTypes, insertProperties, insertReviews, insertFavourites, insertImages} = require("./utils/insertData")
+const { createUsers, createProperties, createReviews, createPropertyTypes, createFavourites, createImages, createBookings } = require("./utils/createTables");
+const { insertUser, insertPropertyTypes, insertProperties, insertReviews, insertFavourites, insertImages, insertBookings} = require("./utils/insertData")
 
 exports.seed = async () => {
   await createUsers();
@@ -9,7 +9,9 @@ exports.seed = async () => {
   await insertUser()
   await insertProperties();
   await Promise.all([insertPropertyTypes(), insertFavourites()])
-  await insertReviews()
-  await createImages()
-  await insertImages()
+  await insertReviews();
+  await createImages();
+  await insertImages();
+  await createBookings();
+  await insertBookings();
 };
