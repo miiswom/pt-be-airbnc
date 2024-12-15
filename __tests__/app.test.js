@@ -14,7 +14,7 @@ afterAll(() => {
   return db.end();
 });
 
-describe.only("GET PROPERTIES", () => {
+describe("GET PROPERTIES", () => {
   describe("GET /api/properties", () => {
     test("200 - it should respond with an array of property objects", async () => {
       return request(app).get('/api/properties')
@@ -513,7 +513,7 @@ describe("GET USER", () => {
   })
 });
 
-describe("PATCH USER", () => {
+describe.only("PATCH USER", () => {
   describe("PATCH /api/users/:id with 1 valid key", () => {
     test("200 - when patching first_name only", async () => {
       const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
