@@ -1,5 +1,5 @@
 const express = require("express");
-const { handleNotFound, handleBadRequest, handleInvalidEndpoint } = require("./errors")
+const { handleNotFound, handleBadRequest, handleInvalidEndpoint } = require("./controllers/errors/handlingErrors")
 const app = express();
 const apiRouter  = require("./routers/api.router");
 

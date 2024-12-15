@@ -1,11 +1,11 @@
 const express = require("express");
 const {getProperties, getPropertyById, getPropertyReview } = require("../controllers/properties.controllers");
-const { postNewFavourite } = require("../controllers/favourites.controllers");
+const { postNewFavourite } = require("../controllers/favourite.controllers");
 const { postNewReview } = require("../controllers/reviews.controllers")
-const { handleMethodNotAllowed } = require("../errors");
+const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
 const propertiesRouter = express.Router();
 
-// properties:id router //
+// properties router //
 propertiesRouter
 .route("/")
 .get(getProperties);
