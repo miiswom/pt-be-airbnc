@@ -254,7 +254,7 @@ describe("INVALID METHODS /api/users/:id", () => {
       expect(res.status).toBe(400)
       expect(msg).toBe('Sorry, bad request.')
     })
-  });
+  }); 
 
   describe("PATCH /api/user/:id [invalid endpoint]", () => {
     test("400 - responds with an object containing a message 'Sorry, invalid endpoint.", async () => {

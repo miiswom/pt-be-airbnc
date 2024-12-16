@@ -1,5 +1,5 @@
 const express = require("express");
-const {getProperties, getPropertyById, getPropertyReview } = require("../controllers/properties.controllers");
+const {getProperties, getPropertyById, getPropertyReview, getBookings } = require("../controllers/properties.controllers");
 const { postNewFavourite } = require("../controllers/favourite.controllers");
 const { postNewReview } = require("../controllers/reviews.controllers")
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
@@ -23,8 +23,17 @@ propertiesRouter
 .get(getPropertyReview)
 .post(postNewReview);
 
+// bookings 
+propertiesRouter
+.route("/:id/bookings")
+.get(getBookings)
+
 propertiesRouter
 .route("/?(*)?")
 .all(handleMethodNotAllowed);
 
+
+
 module.exports = propertiesRouter;
+
+//

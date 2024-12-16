@@ -56,3 +56,25 @@ exports.calcAverageRating = async (obj) => {
   average_rating = total / obj.length
   return average_rating;
 };
+
+// bookings 
+
+exports.fetchBookings = (id) => {
+  return db.query(`SELECT property_id,
+                          booking_id,
+                          check_in_date,
+                          check_out_date,
+                          created_at
+                    FROM bookings
+                    WHERE property_id = $1;`, [id])
+            .then(({rows}) => { 
+              if(rows.length === 0) {
+                return Promise.reject({status: 404})
+              } else {
+                return { bookings: [{booking_id: rows[0].booking_id, 
+                                    check_in_date: rows[0].check_in_date,
+                                    check_out_date: rows[0].check_out_date,
+                                    created_at: rows[0].created_at}], 
+                        property_id: rows[0].property_id }
+              } })
+}

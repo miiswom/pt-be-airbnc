@@ -1,4 +1,4 @@
-const { fetchProperties, fetchPropertyById, fetchPropertyReviews, calcAverageRating} = require("../models/properties.models")
+const { fetchProperties, fetchPropertyById, fetchPropertyReviews, calcAverageRating, fetchBookings} = require("../models/properties.models")
 // properties 
 exports.getProperties = (req, res, next) => {
   const { maxprice, minprice, sort, order, host } = req.query
@@ -42,3 +42,13 @@ exports.getPropertyReview = async (req, res, next) => {
     next(err)
   }
 };
+
+exports.getBookings = (req, res, next) => {
+  const {id } = req.params;
+
+  fetchBookings(id).then((bookings) => {
+    res.status(200).json(bookings)
+  }).catch((err) => {
+    next(err)
+  })
+}

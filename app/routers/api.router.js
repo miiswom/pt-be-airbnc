@@ -5,8 +5,6 @@ const favouriteRouter = require("./favourite.router");
 const reviewsRouter = require("../routers/reviews.router");
 const usersRouter = require("./users.router")
  
-
-
 apiRouter.use("/properties", propertiesRouter)
 apiRouter.use("/favourite", favouriteRouter)
 apiRouter.use("/reviews", reviewsRouter);
