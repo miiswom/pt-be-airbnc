@@ -1,4 +1,4 @@
-const { fetchProperties, fetchPropertyById, fetchPropertyReviews, calcAverageRating, fetchBookings} = require("../models/properties.models")
+const { fetchProperties, fetchPropertyById, fetchPropertyReviews, calcAverageRating, fetchPropertyBookings, addPropertyBooking} = require("../models/properties.models")
 // properties 
 exports.getProperties = (req, res, next) => {
   const { maxprice, minprice, sort, order, host } = req.query
@@ -43,11 +43,22 @@ exports.getPropertyReview = async (req, res, next) => {
   }
 };
 
-exports.getBookings = (req, res, next) => {
+exports.getPropertyBookings = (req, res, next) => {
   const {id } = req.params;
-
-  fetchBookings(id).then((bookings) => {
+  fetchPropertyBookings(id).then((bookings) => {
     res.status(200).json(bookings)
+  }).catch((err) => {
+    next(err)
+  })
+};
+
+exports.postPropertyBooking = (req, res, next) => {
+  const { id } = req.params;
+  const { guest_id, check_in_date, check_out_date } = req.body;
+
+  addPropertyBooking(id, guest_id, check_in_date, check_out_date)
+  .then((booking_id) => {
+    res.status(201).send({msg: "Booking successful!", booking_id})
   }).catch((err) => {
     next(err)
   })

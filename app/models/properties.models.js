@@ -1,5 +1,5 @@
 const db = require("../../db/connection");
-const { selectPropertiesQuery, selectPropertyByIdQuery, selectReviewsByIdQuery,} = require("./queries/queryStr")
+const { selectPropertiesQuery, selectPropertyByIdQuery, selectReviewsByIdQuery, insertBookingQuery} = require("./queries/queryStr")
 
 // properties 
 exports.fetchProperties = async (maxprice, minprice, sort, order, host) => {
@@ -59,7 +59,7 @@ exports.calcAverageRating = async (obj) => {
 
 // bookings 
 
-exports.fetchBookings = (id) => {
+exports.fetchPropertyBookings = (id) => {
   return db.query(`SELECT property_id,
                           booking_id,
                           check_in_date,
@@ -77,4 +77,12 @@ exports.fetchBookings = (id) => {
                                     created_at: rows[0].created_at}], 
                         property_id: rows[0].property_id }
               } })
+};
+
+exports.addPropertyBooking = (id, guest_id, check_in_date, check_out_date) => {
+  const { insertBooking } = insertBookingQuery()
+  return db.query(insertBooking, [id, guest_id, check_in_date, check_out_date])
+            .then(({rows}) => { 
+
+              return rows[0].booking_id})
 }

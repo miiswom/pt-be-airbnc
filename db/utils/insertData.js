@@ -15,7 +15,8 @@ function getPropId(property_name) {
 
 exports.insertUser = () => {
   const users = require("../data/test/users.json")
-    .map((user) => [user.first_name,
+    .map((user) => [
+    user.first_name,
     user.surname,
     user.email,
     user.phone_number,
@@ -102,14 +103,12 @@ exports.insertImages = () => {
 exports.insertBookings = () => {
   const bookings = require("../data/test/bookings.json");
   const formattedBookings = bookings.map((booking, i) => [
-    booking.booking_id = i+1,
     booking.property_id = getPropId(booking.property_name),
     booking.guest_id = getId(booking.guest_name),
     booking.check_in_date,
     booking.check_out_date
   ])
-  return db.query(format(`INSERT INTO bookings( booking_id,
-                                                property_id,
+  return db.query(format(`INSERT INTO bookings( property_id,
                                                 guest_id,
                                                 check_in_date,
                                                 check_out_date) VALUES %L RETURNING *;`, formattedBookings))

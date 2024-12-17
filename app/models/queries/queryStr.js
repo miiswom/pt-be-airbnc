@@ -163,5 +163,14 @@ exports.patchUserByIdQuery = (id, first_name, surname, email, phone_number, avat
   updateUserById += updateSets.join(",") 
   updateUserById += ` WHERE user_id= $1 RETURNING user_id, first_name, surname, email, phone_number AS phone, avatar, created_at;`
   return { updateUserById, values }
+};
+
+exports.insertBookingQuery = () => {
+  const insertBooking = `INSERT INTO bookings(property_id,
+                                              guest_id, 
+                                              check_in_date,
+                                              check_out_date)
+                            VALUES ($1, $2, $3, $4) RETURNING *;`
+    return { insertBooking }
 }
 

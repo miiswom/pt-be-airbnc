@@ -21,7 +21,6 @@ describe("INVALID ENDPOINTS", () => {
   })
 });
 
-  // add test for invalid methods
   describe("INVALID METHODS /api/properties/:id/favourite", () => {
     test("405 - responds with a json containing an error message 'Sorry, method not allowed'", async () => {
       const methods = ['get', 'put', 'patch']

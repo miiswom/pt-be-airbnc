@@ -3,8 +3,7 @@ const db = require("../connection");
 
 exports.createUsers = async() => {
   await db.query(`DROP TABLE IF EXISTS users CASCADE;`);
-  await db.query(`CREATE TABLE users ( 
-                    user_id SERIAL PRIMARY KEY,
+  await db.query(`CREATE TABLE users ( user_id SERIAL PRIMARY KEY,
                       first_name VARCHAR NOT NULL,
                         CONSTRAINT ch_first_name CHECK(REGEXP_LIKE(first_name, '[a-zA-Z]')),
                       surname VARCHAR NOT NULL,
@@ -68,7 +67,7 @@ exports.createImages = async() => {
 };
 
 exports.createBookings = async() => {
-  await db.query(`DROP TABLE IF EXISTS bookings CASCADE;`);
+  await db.query(`DROP TABLE IF EXISTS bookings;`);
   await db.query(`CREATE TABLE bookings(  booking_id SERIAL PRIMARY KEY,
                                           property_id INT NOT NULL REFERENCES properties(property_id),
                                           guest_id INT NOT NULL REFERENCES users(user_id),

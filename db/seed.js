@@ -11,7 +11,6 @@ exports.seed = async () => {
   await Promise.all([insertPropertyTypes(), insertFavourites()])
   await insertReviews();
   await createImages();
-  await insertImages();
   await createBookings();
-  await insertBookings();
+  await Promise.all([insertImages(), insertBookings()]);
 };
