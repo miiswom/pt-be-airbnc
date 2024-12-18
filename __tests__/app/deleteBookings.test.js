@@ -23,7 +23,7 @@ describe("INVALID endpoints", () => {
 
 describe("INVALID METHODS /api/bookings/:id", () => {
   test("405 - responds with a json containing an error message 'Sorry, method not allowed'", async () => {
-    const methods = ['get', 'put', 'patch', 'post']
+    const methods = ['get', 'put', 'post']
     for (const method of methods) {
       const res = await request(app)[method]('/api/bookings/:id')
       const { body: { msg } } = res;

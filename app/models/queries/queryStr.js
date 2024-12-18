@@ -172,5 +172,13 @@ exports.insertBookingQuery = () => {
                                               check_out_date)
                             VALUES ($1, $2, $3, $4) RETURNING *;`
     return { insertBooking }
+};
+
+exports.updateBookingByIdQuery = () => {
+    let updateBookingById = `UPDATE bookings SET 
+    check_in_date = COALESCE($1, check_in_date),
+    check_out_date = $2
+    WHERE booking_id = $3 RETURNING *;`;
+    return {updateBookingById}
 }
 

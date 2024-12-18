@@ -47,7 +47,7 @@ describe("INVALID ENDPOINTS", () => {
       expect(body.msg).toBe('Booking successful!')
     });
 
-    test("404 - :unavailable_id - responds with a json containing a error message: 'Sorry, not found'", async () => {
+    test("404 - :unavailable_id - responds with a json containing an error message: 'Sorry, not found'", async () => {
       const res = await request(app).post('/api/properties/56/booking').send(
         {
           "guest_id": "3",
@@ -57,6 +57,20 @@ describe("INVALID ENDPOINTS", () => {
       const { body : {msg}} = res;
       expect(res.status).toBe(404)
       expect(msg).toBe('Sorry, not found.')
+    });
+
+    test("404 - [overlapping daterange] - responds with a json containing an error message: 'Sorry, these dates are unavailble.'", async () => {
+      const bookingOneResponse = await request(app).post('/api/properties/1/booking').send(
+        {
+          "guest_id": "3",
+          "check_in_date": "2024-12-24",
+          "check_out_date": "2025-01-05"
+        }).then(({body}) => { return body })
+        expect(bookingOneResponse.msg).toBe('Booking successful!')
+      //const { body : {msg}} = res;
+      console.log(bookingOneResponse)
+      //const bookingTwoResponse = 
+      //expect(res.status).toBe(404)
     })
 
     describe("Invalid typeof guest_id | check_in_date | check_out_date", () => {

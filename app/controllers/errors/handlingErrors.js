@@ -8,10 +8,14 @@ res.status(404).json({msg: 'Sorry, invalid endpoint.'})
 
 // err.code 23503 : foreign_key_violation
 // err.code 42703 : undefined_column
+// err.code 23P01 : exclusion_violation (for bookings overlap)
+
 exports.handleNotFound = (err, req, res, next) => {
   if(err.code === "22003" || err.code === "23503" || err.code === '42703' ||err.status === 404 ) {
-    res.status(404).json({msg: 'Sorry, not found.'})
-  } else {
+    res.status(404).json({msg: 'Sorry, not found.'}) 
+  } else if (err.code === "23P01") { 
+    res.status(404).json({msg: 'Sorry, these dates are unavailable.'})
+  }else {
     next(err)
   }
 };
@@ -32,7 +36,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 exports.handleBadRequest = (err, req, res, next) => {
   if(err.code === "22P02" || err.code === "23514" || err.code === "22007" || err.code === "23502" || err.status === 400) {
     res.status(400).json({msg: 'Sorry, bad request.'})
-  } else {
+  }  else {
     next(err)
   }
 };
