@@ -14,7 +14,7 @@ exports.handleNotFound = (err, req, res, next) => {
   if(err.code === "22003" || err.code === "23503" || err.code === '42703' ||err.status === 404 ) {
     res.status(404).json({msg: 'Sorry, not found.'}) 
   } else if (err.code === "23P01") { 
-    res.status(404).json({msg: 'Sorry, these dates are unavailable.'})
+    res.status(404).json({msg: 'Sorry, overlapping date range.'})
   }else {
     next(err)
   }
