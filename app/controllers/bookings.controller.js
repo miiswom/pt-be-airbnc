@@ -15,7 +15,6 @@ exports.patchBooking = (req, res, next) => {
   updateBooking(id, check_in_date,  check_out_date).then((booking) => {
     res.status(200).json({booking})
   }).catch((err) => {
-    console.log(err)
     next(err)
   })
 }

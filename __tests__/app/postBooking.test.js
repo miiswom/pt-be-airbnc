@@ -59,7 +59,7 @@ describe("POST /api/properties/:id/booking", () => {
     expect(msg).toBe('Sorry, not found.')
   });
 
-  test("404 - [overlapping daterange] - responds with a json containing an error message: 'Sorry, overlapping date range.'", async () => {
+  test("404 - [overlapping daterange] - responds with a json containing an error message: 'Sorry, overlapping dates.'", async () => {
     const bookingOneResponse = await request(app).post('/api/properties/1/booking').send(
       {
         "guest_id": "3",
@@ -74,7 +74,7 @@ describe("POST /api/properties/:id/booking", () => {
         "check_in_date": "2024-12-24",
         "check_out_date": "2025-01-05"
       }).then(({ body }) => { return body })
-    expect(bookingTwoResponse.msg).toBe('Sorry, overlapping date range.')
+    expect(bookingTwoResponse.msg).toBe('Sorry, overlapping dates.')
   })
 
   describe("Invalid typeof guest_id | check_in_date | check_out_date", () => {

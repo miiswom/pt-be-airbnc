@@ -38,101 +38,35 @@ describe("INVALID METHODS  /api/bookings/:id", () => {
 });
 
   describe("PATCH /api/bookings/:id", () => {
-    test.only("200 :valid_id - responds with the update booking object", async () => {
+    test("200 :valid_id - responds with the update booking object", async () => {
       const res = await request(app).patch('/api/bookings/1').send(
         {
           "check_in_date": "2025-01-04",
           "check_out_date": "2025-01-07"
       })
       const { body: { booking } } = res;
-      console.log(booking)
       expect(res.status).toBe(200)
-      //expect(booking.check_in_date).toEqual("2025-01-01");
-      //expect(booking.check_out_date).toEqual("2025-01-04")
+      expect(booking.check_in_date).toEqual("2025-01-04");
+      expect(booking.check_out_date).toEqual("2025-01-07")
     });
-    test("200 - when patching surname only", async () => {
-      const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
-      const res = await request(app).patch('/api/users/1').send(
-        {
-          "surname": "TestB"
-        }
-      )
-      const { body: { user } } = res;
-      expect(user.surname).not.toEqual(formerUser.surname);
-      expect(user.surname).toBe('TestB');
-      expect(user.user_id).toEqual(formerUser.user_id)
-      expect(user.first_name).toEqual(formerUser.first_name);
-      expect(user.email).toEqual(formerUser.email)
-      expect(user.phone).toEqual(formerUser.phone_number)
-      expect(user.avatar).toEqual(formerUser.avatar)
-    });
-    test("200 - when patching email only", async () => {
-      const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
-      const res = await request(app).patch('/api/users/1').send(
-        {
-          "email": "testc@example.com"
-        }
-      )
-      const { body: { user } } = res;
-      expect(user.email).not.toEqual(formerUser.email);
-      expect(user.email).toBe('testc@example.com');
-      expect(user.user_id).toEqual(formerUser.user_id)
-      expect(user.first_name).toEqual(formerUser.first_name);
-      expect(user.surname).toEqual(formerUser.surname)
-      expect(user.phone).toEqual(formerUser.phone_number)
-      expect(user.avatar).toEqual(formerUser.avatar)
-    });
-    test("200 - when patching phone only", async () => {
-      const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
-      const res = await request(app).patch('/api/users/1').send(
-        {
-          "phone": "06123456789"
-        }
-      )
-      const { body: { user } } = res;
-      expect(user.phone).not.toEqual(formerUser.phone_number);
-      expect(user.phone).toBe('06123456789');
-      expect(user.user_id).toEqual(formerUser.user_id)
-      expect(user.first_name).toEqual(formerUser.first_name);
-      expect(user.email).toEqual(formerUser.email)
-      expect(user.surname).toEqual(formerUser.surname)
-      expect(user.avatar).toEqual(formerUser.avatar)
-    });
-    test("200 - when patching avatar only", async () => {
-      const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
-      const res = await request(app).patch('/api/users/1').send(
-        {
-          "surname": "TestB"
-        }
-      )
-      const { body: { user } } = res;
-      expect(user.surname).not.toEqual(formerUser.surname);
-      expect(user.surname).toBe('TestB');
-      expect(user.user_id).toEqual(formerUser.user_id)
-      expect(user.first_name).toEqual(formerUser.first_name);
-      expect(user.email).toEqual(formerUser.email)
-      expect(user.phone).toEqual(formerUser.phone_number)
-      expect(user.avatar).toEqual(formerUser.avatar)
-    });
-  });
 
-  describe("PATCH /api/users/:id with 2 valid keys", () => {
-    test("200 - when patching first_name and avatar only", async () => {
-      const formerUser = await request(app).get('/api/users/1').then(({ body: { user } }) => { return user })
-      const res = await request(app).patch('/api/users/1').send(
+    test("404 :overelapping daterange - responds with a json message 'Sorry, overlapping dates.'", async () => {
+      const bookingResponseOne = await request(app).patch('/api/bookings/1').send(
         {
-          "first_name": "TestA",
-          "avatar": "image-test.jpeg"
-        }
-      )
-      const { body: { user } } = res;
-      expect(user.first_name).not.toEqual(formerUser.first_name);
-      expect(user.avatar).not.toEqual(formerUser.avatar)
-      expect(user.first_name).toBe('TestA');
-      expect(user.avatar).toEqual('image-test.jpeg')
-      expect(user.user_id).toEqual(formerUser.user_id)
-      expect(user.surname).toEqual(formerUser.surname);
-      expect(user.email).toEqual(formerUser.email)
-      expect(user.phone).toEqual(formerUser.phone_number)
-    });
-  });
+          "check_in_date": "2025-01-01",
+          "check_out_date": "2025-01-07"
+      }).then(({body }) => { return body })
+      expect(bookingResponseOne.booking.check_in_date).toEqual("2025-01-01");
+      expect(bookingResponseOne.booking.check_out_date).toEqual("2025-01-07")
+      console.log(bookingResponseOne)
+
+      const bookingResponseTwo = await request(app).patch('/api/bookings/1').send(
+        {
+          "check_in_date": "2025-01-06",
+          "check_out_date": "2025-01-10"
+      }).then(({ body }) => { return body})
+      expect(bookingResponseTwo.booking).toBeUndefined()
+      expect(bookingResponseTwo.msg).toBe('Sorry, overlapping dates.');
+    })
+    
+  })
