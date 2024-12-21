@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("INVALID ENDPOINTS", () => {
-  test("404 - responds with a json containing a message 'Sorry, not found'", async () => {
+  test("404 - responds with a json containing a message 'Sorry, invalid endpoint'", async () => {
     const res = await request(app).get('/api/usersss/1')
     const { body: { msg } } = res;
     expect(res.status).toBe(404)

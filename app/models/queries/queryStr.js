@@ -182,5 +182,25 @@ exports.updateBookingByIdQuery = () => {
     WHERE property_id = $3
     AND check_in_date < $2 AND check_out_date > $1 ) RETURNING *;`;
     return {updateBookingById}
+};
+
+exports.selectUsersBookingByIdQuery = () => {
+  const selectUsersBookingById = `SELECT  bookings.booking_id,
+                                          bookings.property_id,
+                                          bookings.check_in_date,
+                                          bookings.check_out_date,
+                                          CONCAT(users.first_name, ' ', users.surname) AS host,
+                                          properties.name AS property_name,
+                                          images.image_url AS image
+                                    FROM bookings
+                                    JOIN users
+                                    ON bookings.guest_id = users.user_id
+                                    JOIN properties
+                                    ON bookings.property_id = properties.property_id
+                                    JOIN images
+                                    ON properties.property_id = images.property_id
+                                  WHERE users.user_id = $1;`;
+
+  return { selectUsersBookingById}
 }
 

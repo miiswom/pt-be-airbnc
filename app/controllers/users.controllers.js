@@ -1,4 +1,4 @@
-const { fetchUserById, updateUser } = require("../models/users.models")
+const { fetchUserById, updateUser, fetchUsersBooking } = require("../models/users.models")
 
 
 // users 
@@ -25,3 +25,13 @@ exports.patchUser = (req, res, next) => {
     })
 };
 
+exports.getUsersBookings = (req, res, next) => {
+  const { id } = req.params;
+  fetchUsersBooking(id).then((bookings) => {
+    //console.log(bookings)
+
+    res.status(200).json({bookings})
+  }).catch((err) => {
+    next(err)
+  })
+}

@@ -13,7 +13,7 @@ afterAll(() => {
 });
 
 describe("INVALID endpoints", () => {
-  test("400 - responds with a 'Sorry, bad request' error message", async () => {
+  test("400 - responds with a 'Sorry, invalid endpoint' error message", async () => {
     const res = await request(app).delete('/api/reviews/properties/10');
     const { body: { msg } } = res;
     expect(res.status).toBe(404)
