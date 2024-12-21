@@ -178,8 +178,7 @@ exports.updateBookingByIdQuery = () => {
     let updateBookingById = `UPDATE bookings 
     SET check_in_date = $1, check_out_date = $2
     WHERE property_id = $3
-    AND NOT EXISTS (
-    SELECT * FROM bookings
+    AND NOT EXISTS ( SELECT * FROM bookings
     WHERE property_id = $3
     AND check_in_date < $2 AND check_out_date > $1 ) RETURNING *;`;
     return {updateBookingById}

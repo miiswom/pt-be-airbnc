@@ -16,7 +16,7 @@ exports.updateBooking = (id, check_in_date, check_out_date) => {
   return db.query(updateBookingById, [check_in_date, check_out_date, id])
     .then(({ rows }) => {
       if (rows.length === 0) {
-        return Promise.reject({status: "23P01"})
+        return Promise.reject({status: 404})
       } else {
         return {
           booking_id: rows[0].booking_id,
