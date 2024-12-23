@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airbnb Style Application Backend</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
+    rel="stylesheet">
+  <!-- <link href="/css/styles.css" rel="stylesheet"  type="text/css"/> -->
+  <style>
+    /*
+  font-family: S 
+  */
+    /* * {
+    border: 1px dotted red;
+  } */
+    /* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+    /* html, */
+    /* body,
+    div,
+    span,
+    applet,
+    object,
+    iframe,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    blockquote,
+    pre,
+    a,
+    abbr,
+    acronym,
+    address,
+    big,
+    cite,
+    code,
+    del,
+    dfn,
+    em,
+    img,
+    ins,
+    kbd,
+    q,
+    s,
+    samp,
+    small,
+    strike,
+    strong,
+    sub,
+    sup,
+    tt,
+    var,
+    b,
+    u,
+    i,
+    center,
+    dl,
+    dt,
+    dd,
+    ol,
+    ul,
+    li,
+    fieldset,
+    form,
+    label,
+    legend,
+    table,
+    caption,
+    tbody,
+    tfoot,
+    thead,
+    tr,
+    th,
+    td,
+    article,
+    aside,
+    canvas,
+    details,
+    embed,
+    figure,
+    figcaption,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    output,
+    ruby,
+    section,
+    summary,
+    time,
+    mark,
+    audio,
+    video { */
+     *{    
+      box-sizing: border-box;   
+      margin: 0;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        font-size: 100%;
+        vertical-align: baseline;
+        background: transparent;
+        overflow-x:hidden;
+
+    }
+
+    h1, h2, h3, h4, a, div, header, ul{
+      overflow-x:visible;
+
+    }
+
+    /* HTML5 display-role reset for older browsers */
+    article,
+    aside,
+    details,
+    figcaption,
+    figure,
+    footer,
+    header,
+    hgroup,
+    menu,
+    nav,
+    section {
+      display: block;
+    }
+
+    ol,
+    ul {
+      list-style: none;
+    }
+
+    /*------------- My desing -----------*/
+
+    body {
+      /* margin: 0; */
+      font-family: "Montserrat", Arial, Helvetica, sans-serif;
+      color: #484848;
+      line-height: 1.8em;
+    }
+
+    a {
+      text-decoration: none;
+      padding-bottom: 5px;
+      /* border-bottom: 1px solid black; */
+      color: inherit;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 1100px;
+      margin: 0 auto;
+      /* border: 3px dotted green; */
+
+    }
+
+    header {
+      padding: 40px 20px;
+      background: #ff5a5f;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      padding: 20px 40px;
+    }
+
+    nav {
+      margin: 0 auto;
+    }
+
+    ul {
+      width: 100%;
+    }
+
+    h1 {
+      font-size: 2em;
+      font-weight: 600;
+      padding: 40px 20px;
+    }
+
+    h1,
+    header>p {
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      font-weight: bold;
+      padding: 40px 20px;
+      border-bottom: 3px double #fc642d;
+    }
+
+    h3 {
+      padding: 20px 20px;
+      font-weight: bold;
+    }
+
+    .ul_endpoints {
+      opacity: 0.8;
+      font-size: 0.8em;
+      padding: 40px 20px;
+      max-width: 100%;
+      display: inline-block;
+      background: rgb(246, 244, 244);
+      margin: 0 auto;
+      overflow:scroll;
+      border: 1px solid black;
+    }
+
+    .ul_endpoints>li {
+      padding-bottom: 8px;
+
+
+    }
+
+    .methods {
+      font-weight: bold;
+      background: #00a699;
+      color: azure;
+      padding: 3px 10px;
+      margin-right: 10px;
+      border-radius: 8px;
+    }
+
+    .nav_list {
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* .nav_list>li > a {
+       padding: 20px 10px; 
+      max-width: 18%;
+      border: 1px solid black;
+    } */
+
+    pre {
+      background: #484848;
+      /* margin-left: 20px; */
+      font-size: 0.9em;
+      /* border-radius: 20px; */
+      color: azure;
+      font-family: "Source Code Pro", serif;
+      overflow: scroll;
+    }
+
+    p {
+      padding: 10px 20px;
+      font-size: 0.9em;
+    }
+
+    .hero {
+      justify-content: start;
+      /* width: 80%; */
+    }
+
+    .header {
+      justify-content: center;
+    }
+
+    .logo_like {
+      font-weight: bold;
+      align-self: flex-start;
+      margin: 0;
+      padding: 0;
+      font-size: 1em;
+    }
+
+    h4 {
+      padding-left: 40px;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      /* padding: 20px 40px; */
+      background: #767676;
+      color: azure;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container row">
+      <a class="logo_like">Airbnc</a>
+      <nav>
+        <!-- <ul class="nav_list">
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#getting_started">Getting started</a></li>
+          <li><a href="#endpoints">Endpoints</a></li>
+
+        </ul> -->
+        <ul class="row nav_list">
+          <li> <a href="#properties">Properties</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#favourites">Favourites</a></li>
+          <li><a href="#single_property">Property (single)</a></li>
+          <li><a href="#users">Users</a></li>
+          <li><a href="#bookings">Bookings</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <h1>Airbnb Style Application Backend</h1>
+      <p>A RESTful API for managing users, properties, reviews, and bookings.</p>
+      <section id="overview">
+        <h2>Overview</h2>
+        <p>The Airbnb Style API provides a RESTful interface for managing users, properties, reviews, and bookings. It
+          is
+          built with Node.js, Express, and PostgreSQL, offering robust CRUD capabilities.</p>
+      </section>
+
+      <section id="getting_started">
+        <h2>Getting Started</h2>
+        <p>Follow these steps to set up the API locally:</p>
+        <pre>
+        <code>      
+        Clone the repository
+  
+        Install dependencies: npm install
+        
+        Initialize the database: npm run setup-dbs
+        </code>
+      </pre>
+      </section>
+
+      <section id="endpoints">
+        <h2>Endpoints</h2>
+        <ul class="ul_endpoints">
+          <li><span class="methods">DELETE</span>/api/bookings/:id</li>
+          <li><span class="methods">DELETE</span>/api/favourite/:id</li>
+          <li><span class="methods">DELETE</span>/api/reviews/:id</li>
+          <li><span class="methods">GET</span>/api/properties/:id/bookings</li>
+          <li><span class="methods">GET</span>/api/properties</li>
+          <li><span class="methods">GET</span>/api/properties/:id</li>
+          <li><span class="methods">GET</span>/api/properties/:id/reviews</li>
+          <li><span class="methods">GET</span>/api/users/:id</li>
+          <li><span class="methods">GET</span>/api/properties</li>
+          <li><span class="methods">GET</span>/api/users/:id/bookings</li>
+          <li><span class="methods">PATCH</span>/api/bookings/:id</li>
+          <li><span class="methods">PATCH</span>/api/users/:id</li>
+          <li><span class="methods">POST</span>/api/properties/:id/booking</li>
+          <li><span class="methods">POST</span>/api/properties/:id/favourite</li>
+          <li><span class="methods">POST</span>/api/properties/:id/reviews</li>
+        </ul>
+
+        <section id="properties">
+          <h2>Properties</h2>
+
+          <section>
+            <h3><span class="methods">GET</span> /api/properties</h3>
+            <p>Retrieve a list of all the properties</p>
+            <pre>
+            <code>
+        {
+          "properties": [
+          {
+            "property_id": "[id]",
+            "property_name": "[name]",
+            "location": "[location]"
+            "price_per_nigth": [price],
+            "host": "[host name]"
+          }, 
+          ...
+          ]
+        }
+            </code>
+          </pre>
+            <h3><span class="methods">GET</span> /api/properties (queries)</h3>
+
+            <h4>?maxprice=[max price_per_nigth]</h4>
+            <p>Sort properties by price_per_nigth descendingly</p>
+
+            <h4>?minprice=[min price_per_nigth]</h4>
+            <p>Sort properties by price_per_nigth ascendingly</p>
+
+            <h4>?sort=[price_per_nigth | popularity]</h4>
+            <p>Sort properties by price_per_nigth or popularity (ascending order by default)</p>
+
+            <h4>?order=[ascending | desscending]</h4>
+            <p>Sort properties by ascending or descending order according to the sort. By default it will sort by
+              popularity ascendingly.</p>
+
+            <h4>?host=[id]</h4>
+            <p>Sort properties host_id (ascending order by default)</p>
+          </section>
+        </section>
+
+        <section id="reviews">
+          <h2>Reviews</h2>
+          <section>
+            <h3><span class="methods">GET</span> /api/properties/:id/reviews</h3>
+            <p>Retrieve all reviews of a specific property and its average rating.</p>
+            <p>It should responds with the following:</p>
+            <pre>
+              <code>
+        {
+          "reviews": [
+            {
+              "review_id": "[id]",
+              "comment": "[comment]",
+              "rating": "[rating]",
+              "created_at": "[date]",
+              "guest": "[guest_name]",
+              "guest_avatar": "[img_url]"
+            },
+            ...
+          ],
+          "average_rating": "[avg_of_ratings]"
+        } 
+            </code>
+          </pre>
+          </section>
+
+          <section>
+            <h3><span class="methods">POST</span> /api/properties/:id/reviews</h3>
+            <p>It should expect to receive the following payload:</p>
+            <pre>
+            <code>
+        {
+          "guest_id": [id],
+          "rating": "[rating]",
+          "comment": "[comment]"
+        }
+            </code>
+          </pre>
+            <p>It should insert a new review and responds with the following:
+              <br>201 Status code
+            </p>
+            <pre>
+            <code>
+        {
+          "review_id": "[id]",
+          "property_id": "[id]",
+          "guest_id": "[id]",
+          "rating": "[rating]",
+          "comment": "[comment]",
+          "created_at": "[date]"
+        }
+            </code>
+          </pre>
+          </section>
+
+          <section>
+            <h3><span class="methods">DELETE</span> /api/reviews/:id</h3>
+            <p>Removes a specific review identified by id.</p>
+            <p>It should responds with the following:
+              <br>204 Status code, no body.
+            </p>
+          </section>
+
+        </section>
+
+        <section id="favourites">
+          <h2>Favourites</h2>
+          <section>
+            <h3> <span class="methods">POST</span> /api/properties/:id/favourite</h3>
+            <p>Create a new favourite property</p>
+            <pre>
+            <code>
+              body: 
+        {
+          "guest_id": "[id]"
+        }
+            </code>
+          </pre>
+            <p>It shoudld responds with the following:
+              <br> 201 Status code
+            </p>
+            <pre>
+              <code>
+        {
+          "msg": "Property favourited successfully.",
+          "favourite_id": "[id]"
+        }
+              </code>
+            </pre>
+          </section>
+
+          <section>
+            <h3> <span class="methods">DELETE</span> /api/favourite/:id</h3>
+            <p>Remove a favourite property</p>
+            <p>It shoudld responds with the following:
+              <br> 204 Status code, no body.
+            </p>
+          </section>
+        </section>
+
+        <section id="single_property">
+          <h2>Property</h2>
+          <section>
+            <h3><span class="methods">GET</span> /api/properties/:id</h3>
+            <p>Retrieve a specific property information.</p>
+            <p>It should responds with the following:
+              <br>200 Status code
+            </p>
+            <pre>
+            <code>
+        {
+          "property":
+            {
+              "property_id": "[id]",
+              "property_name": "[id]",
+              "location": "[id]",
+              "price_per_nigth": "[price]",
+              "description": "[description]",
+              "host": "[host name]",
+              "host_avatar": "image_url",
+              "favourite_count": "[count]",
+              "image": "[array of images]"
+            }
+        }
+            </code>
+          </pre>
+          </section>
+        </section>
+
+        <section id="users">
+          <h2>Users</h2>
+          <section>
+            <h3><span class="methods">GET</span> /api/users/:id</h3>
+            <p>Retreive a specific user information</p>
+            <p>It should responds with the following:
+              <br> 200 Status code
+            </p>
+            <pre>
+                <code>
+        {
+          "user":
+            {
+              "user_id": "[id]",
+              "first_name": "[name]",
+              "surname": "[name]",
+              "email": "[email]",
+              "phone_number": "[phone number]",
+              "avatar": "[image url]",
+              "created_at": "[date]"
+            }
+        }
+                </code>
+              </pre>
+          </section>
+          <section>
+            <h3><span class="methods">PATCH</span> /api/users/:id</h3>
+            <p>Update any combination of the following properties:</p>
+            <pre>
+              <code>
+        {
+          "first_name": "[name]",
+          "surname": "[name]",
+          "email": "[email]",
+          "phone_number": "[phone number]",
+          "avatar": "[image url]"
+        }
+              </code>
+            </pre>
+            <p>It should responds with the updated property:</p>
+            <pre>
+              <code>
+        {
+          "property":
+            {
+              "property_id": "[id]",
+              "property_name": "[id]",
+              "location": "[id]",
+              "price_per_nigth": "[price]",
+              "description": "[description]",
+              "host": "[host name]",
+              "host_avatar": "image_url",
+              "favourite_count": "[count]",
+              "image": "[array of images]"
+            }
+        }
+              </code>
+            </pre>
+          </section>
+        </section>
+
+        <section id="bookings">
+          <h2>Bookings</h2>
+          <section>
+            <h3><span class="methods">GET</span> /api/properties/:id/bookings</h3>
+            <p>Retrieve all the bookings of property</p>
+            <p>It should responds with the following:
+              <br> 200 Status code
+            </p>
+            <pre>
+            <code>
+        {
+          "bookings": [
+            {
+              "booking_id": "[id]",
+              "check_in_date": "[date]",
+              "check_in_date": "[date]",
+              "created_at": "[date]"
+            },
+            ...
+          ],
+          "property_id": "[id]"
+        }
+            </code>
+          </pre>
+
+          </section>
+
+          <section>
+            <h3><span class="methods">POST</span> /api/properties/:id/booking</h3>
+            <p>Create a new booking for a specific property.</p>
+            <p>It should expect to receive the following payload:</p>
+            <pre>
+            <code>
+        {
+          "guest_id": [id],
+          "check_in_date": "[date]",
+          "check_out_date": "[date]"
+        }
+            </code>
+          </pre>
+            <p>It should responds with the following:
+              <br>201 Status code
+            </p>
+            <pre>
+            <code>
+        {
+          "msg": "Booking successful!",
+          "booking_id": "[id]"
+        }
+            </code>
+          </pre>
+          </section>
+
+          <section>
+            <h3><span class="methods">DELETE</span> /api/bookings/:id</h3>
+            <p>Removes a booking with a specific id.</p>
+            <p>It should responds with the following:
+              <br>204 Status code, no body.
+            </p>
+          </section>
+
+          <section>
+            <h3><span class="methods">PATCH</span> /api/bookings/:id</h3>
+            <p>It should exepect to receive the following payload:</p>
+            <pre>
+            <code>
+        {
+          "check_in_date": "[date]",
+          "check_out_date": "[date]"
+        }
+            </code>
+          </pre>
+            <p>It should responds with the updated booking:</p>
+            <pre>
+            <code>
+        {
+          "booking_id": "[id]",
+          "check_in_date": "[date]",
+          "check_in_date": "[date]",
+          "created_at": "[date]"
+        }
+            </code>
+          </pre>
+          </section>
+        </section>
+      </section>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2024 Airbnb Style API. Built by <a href="https://github.com/miiswom">miiswom</a> with ❤️ and Node.js.</p>
+  </footer>
+</body>
+
+</html>
