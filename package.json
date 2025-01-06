@@ -9,8 +9,8 @@
     "seed-dev": "NODE_ENV=development npm run seed",
     "test-utils": "jest utils",
     "test": "jest server",
-    "dev": "node listen.js",
-    "start": "node listen.js"
+    "dev": "node app/listen.js",
+    "start": "node app/listen.js"
   },
   "keywords": [],
   "author": "",
