@@ -2,12 +2,15 @@
   "name": "pt-be-airbnc",
   "version": "1.0.0",
   "description": "This project is an Express.js server that connects to a PostgreSQL database to handle user interactions for an Airbnb-style application. Users can manage properties, reviews, and interact with a booking system. The application is thoroughly tested with Jest and Supertest, following Test-Driven Development (TDD) principles.",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "setup-dbs": "psql -f ./db/setup-dbs.sql",
     "seed": "node ./db/run-seed.js",
+    "seed-dev": "NODE_ENV=development npm run seed",
     "test-utils": "jest utils",
-    "test": "jest server"
+    "test": "jest server",
+    "dev": "node listen.js",
+    "start": "node listen.js"
   },
   "keywords": [],
   "author": "",

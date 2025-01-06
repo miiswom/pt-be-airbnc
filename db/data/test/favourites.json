@@ -2,16 +2,7 @@
   {
     "guest_name": "Bob Smith",
     "property_name": "Modern Apartment in City Center"
-  },
-  {
-    "guest_name": "Frank White",
-    "property_name": "Modern Apartment in City Center"
-  },
-  {
-    "guest_name": "Rachel Cummings",
-    "property_name": "Modern Apartment in City Center"
-  },
-  
+  }, 
   {
     "guest_name": "Rachel Cummings",
     "property_name": "Cosy Family House"

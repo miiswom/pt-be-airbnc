@@ -1,6 +1,7 @@
 const {seed} = require("./seed");
-const db = require("./connection")
+const db = require("./connection");
+const data = require("./data/dev")
 
-seed().then(() => {
+seed(data).then(() => {
   db.end();
 })

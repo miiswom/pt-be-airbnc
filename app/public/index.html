@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Airbnb Style Application Backend</title>
+  <title>Airbnb Style RESTful API</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
@@ -13,300 +13,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap"
     rel="stylesheet">
-  <!-- <link href="/css/styles.css" rel="stylesheet"  type="text/css"/> -->
-  <style>
-    /*
-  font-family: S 
-  */
-    /* * {
-    border: 1px dotted red;
-  } */
-    /* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-    /* html, */
-    /* body,
-    div,
-    span,
-    applet,
-    object,
-    iframe,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    p,
-    blockquote,
-    pre,
-    a,
-    abbr,
-    acronym,
-    address,
-    big,
-    cite,
-    code,
-    del,
-    dfn,
-    em,
-    img,
-    ins,
-    kbd,
-    q,
-    s,
-    samp,
-    small,
-    strike,
-    strong,
-    sub,
-    sup,
-    tt,
-    var,
-    b,
-    u,
-    i,
-    center,
-    dl,
-    dt,
-    dd,
-    ol,
-    ul,
-    li,
-    fieldset,
-    form,
-    label,
-    legend,
-    table,
-    caption,
-    tbody,
-    tfoot,
-    thead,
-    tr,
-    th,
-    td,
-    article,
-    aside,
-    canvas,
-    details,
-    embed,
-    figure,
-    figcaption,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    output,
-    ruby,
-    section,
-    summary,
-    time,
-    mark,
-    audio,
-    video { */
-     *{    
-      box-sizing: border-box;   
-      margin: 0;
-        padding: 0;
-        border: 0;
-        outline: 0;
-        font-size: 100%;
-        vertical-align: baseline;
-        background: transparent;
-        overflow-x:hidden;
-
-    }
-
-    h1, h2, h3, h4, a, div, header, ul{
-      overflow-x:visible;
-
-    }
-
-    /* HTML5 display-role reset for older browsers */
-    article,
-    aside,
-    details,
-    figcaption,
-    figure,
-    footer,
-    header,
-    hgroup,
-    menu,
-    nav,
-    section {
-      display: block;
-    }
-
-    ol,
-    ul {
-      list-style: none;
-    }
-
-    /*------------- My desing -----------*/
-
-    body {
-      /* margin: 0; */
-      font-family: "Montserrat", Arial, Helvetica, sans-serif;
-      color: #484848;
-      line-height: 1.8em;
-    }
-
-    a {
-      text-decoration: none;
-      padding-bottom: 5px;
-      /* border-bottom: 1px solid black; */
-      color: inherit;
-    }
-
-    .container {
-      width: 80%;
-      max-width: 1100px;
-      margin: 0 auto;
-      /* border: 3px dotted green; */
-
-    }
-
-    header {
-      padding: 40px 20px;
-      background: #ff5a5f;
-    }
-
-    .row {
-      display: flex;
-    }
-
-    .column {
-      display: flex;
-      flex-direction: column;
-    }
-
-    main {
-      padding: 20px 40px;
-    }
-
-    nav {
-      margin: 0 auto;
-    }
-
-    ul {
-      width: 100%;
-    }
-
-    h1 {
-      font-size: 2em;
-      font-weight: 600;
-      padding: 40px 20px;
-    }
-
-    h1,
-    header>p {
-      text-align: center;
-    }
-
-    h2 {
-      font-size: 1.8em;
-      font-weight: bold;
-      padding: 40px 20px;
-      border-bottom: 3px double #fc642d;
-    }
-
-    h3 {
-      padding: 20px 20px;
-      font-weight: bold;
-    }
-
-    .ul_endpoints {
-      opacity: 0.8;
-      font-size: 0.8em;
-      padding: 40px 20px;
-      max-width: 100%;
-      display: inline-block;
-      background: rgb(246, 244, 244);
-      margin: 0 auto;
-      overflow:scroll;
-      border: 1px solid black;
-    }
-
-    .ul_endpoints>li {
-      padding-bottom: 8px;
-
-
-    }
-
-    .methods {
-      font-weight: bold;
-      background: #00a699;
-      color: azure;
-      padding: 3px 10px;
-      margin-right: 10px;
-      border-radius: 8px;
-    }
-
-    .nav_list {
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    /* .nav_list>li > a {
-       padding: 20px 10px; 
-      max-width: 18%;
-      border: 1px solid black;
-    } */
-
-    pre {
-      background: #484848;
-      /* margin-left: 20px; */
-      font-size: 0.9em;
-      /* border-radius: 20px; */
-      color: azure;
-      font-family: "Source Code Pro", serif;
-      overflow: scroll;
-    }
-
-    p {
-      padding: 10px 20px;
-      font-size: 0.9em;
-    }
-
-    .hero {
-      justify-content: start;
-      /* width: 80%; */
-    }
-
-    .header {
-      justify-content: center;
-    }
-
-    .logo_like {
-      font-weight: bold;
-      align-self: flex-start;
-      margin: 0;
-      padding: 0;
-      font-size: 1em;
-    }
-
-    h4 {
-      padding-left: 40px;
-      font-weight: bold;
-    }
-
-    footer {
-      margin-top: 20px;
-      text-align: center;
-      /* padding: 20px 40px; */
-      background: #767676;
-      color: azure;
-    }
-  </style>
+  <link href="css/styles.css" rel="stylesheet"  type="text/css"/>
 </head>
 
 <body>
 
   <header>
     <div class="container row">
-      <a class="logo_like">Airbnc</a>
+      <a class="logo_like">AirbNC</a>
       <nav>
         <!-- <ul class="nav_list">
           <li><a href="#overview">Overview</a></li>
@@ -328,7 +42,7 @@
 
   <main>
     <div class="container">
-      <h1>Airbnb Style Application Backend</h1>
+      <h1>Airbnb Style RESTful API</h1>
       <p>A RESTful API for managing users, properties, reviews, and bookings.</p>
       <section id="overview">
         <h2>Overview</h2>
@@ -346,7 +60,7 @@
   
         Install dependencies: npm install
         
-        Initialize the database: npm run setup-dbs
+        Initialize the database: npm run seed
         </code>
       </pre>
       </section>

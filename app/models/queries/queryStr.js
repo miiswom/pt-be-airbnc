@@ -16,7 +16,8 @@ exports.selectPropertiesQuery = (maxprice, minprice, sort, order, host) => {
                     JOIN favourites
                     ON properties.property_id = favourites.property_id
                     JOIN images
-                    ON properties.property_id = images.property_id`
+                    ON properties.property_id = images.property_id
+                    GROUP BY properties.host_id, images.property_id, favourites.favourite_id, favourites.guest_id, favourites.property_id, property_name, location, price_per_night, host, images.image_url`
 
   if (maxprice) {
     values.push(maxprice);
