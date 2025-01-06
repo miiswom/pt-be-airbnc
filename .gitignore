@@ -1,21 +1,2 @@
 .env.*
 playground.sql
-
-    // xtest("200 - property object should have a key of 'favourite_count'", async () => {
-    //   const res = await request(app).get('/api/properties');
-    //   const { body: { properties } } = res;
-    //   expect(properties).toBeSortedBy('property_id')
-    // });
-
-    // xtest("405 - respond with an error message 'Sorry, method not allowed.'", async () => {
-    //   const res = await request(app).delete('/api/properties');
-    //   const { body: { msg } } = res;
-    //   expect(msg).toBe('Sorry, method not allowed.')
-    // })
-
-    // test("400 - should respond with a object contaning the message 'Sorry, bad request'", async () => {
-    //   const res = await request(app).get('/api/invalid/endpoint');
-    //   const { body: { msg } } = res;
-    //   expect(res.status).toBe(400)
-    //   expect(msg).toBe('Sorry, bad request.');
-    // });
