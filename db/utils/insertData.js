@@ -2,19 +2,24 @@ const db = require("../connection");
 const format = require("pg-format");
 
 function getId(host_name) {
-  const users = require("../data/test/users.json");
+  const users = require("../data/dev/users.json");
   const id = users.findIndex((user) => host_name.split(" ")[0] === user.first_name && host_name.split(" ")[1] === user.surname)
   return id + 1
 };
 
 function getPropId(property_name) {
-  const properties = require("../data/test/properties.json");
+  const properties = require("../data/dev/properties.json");
   const id = properties.findIndex((property) => property_name === property.name)
+  // properties.map((property, i) => {
+  //   if(property_name === property.name) {
+  //     console.log("---> ", property)
+  //   }
+  // })
   return id + 1
 };
 
 exports.insertUser = () => {
-  const users = require("../data/test/users.json")
+  const users = require("../data/dev/users.json")
     .map((user) => [
     user.first_name,
     user.surname,
@@ -34,7 +39,7 @@ exports.insertUser = () => {
 };
 
 exports.insertPropertyTypes = () => {
-  const formattedPropTypes = require("../data/test/property-types.json")
+  const formattedPropTypes = require("../data/dev/property-types.json")
     .map((type) => [type.property_type,
     type.description]);
 
@@ -43,7 +48,7 @@ exports.insertPropertyTypes = () => {
 };
 
 exports.insertProperties = () => {
-  const formattedProperties = require("../data/test/properties.json")
+  const formattedProperties = require("../data/dev/properties.json")
     .map((property) => [property.host_id = getId(property.host_name),
     property.name,
     property.location,
@@ -61,7 +66,7 @@ exports.insertProperties = () => {
 };
 
 exports.insertReviews = () => {
-  const formattedReviews = require("../data/test/reviews.json")
+  const formattedReviews = require("../data/dev/reviews.json")
     .map((review) => [review.property_id = getPropId(review.property_name),
     review.guest_id = getId(review.guest_name),
     review.rating,
@@ -75,7 +80,7 @@ exports.insertReviews = () => {
 };
 
 exports.insertFavourites = () => {
-  const formattedFavourites = require("../data/test/favourites.json")
+  const formattedFavourites = require("../data/dev/favourites.json")
     .map((favourite) => [
       favourite.guest_id = getId(favourite.guest_name),
       favourite.property_id = getPropId(favourite.property_name)])
@@ -86,22 +91,21 @@ exports.insertFavourites = () => {
 };
 
 exports.insertImages = () => {
-  const images = require("../data/test/images.json")
+  const images = require("../data/dev/images.json")
   const formattedImages = images.map((image, i) => [
-    image.image_id = i+1,
     image.property_id = getPropId(image.property_name),
     image.image_url,
-    image.alt_text = image.alt_tag
+    image.alt_text = image.alt_tag,
   ])
-  return db.query(format(`INSERT INTO images(  image_id, 
-                                        property_id,
+  // console.log(formattedImages)
+  return db.query(format(`INSERT INTO images(  property_id,
                                         image_url,
                                         alt_text) VALUES %L RETURNING *;`, formattedImages))
             .then(({rows}) => { return rows})
 };
 
 exports.insertBookings = () => {
-  const bookings = require("../data/test/bookings.json");
+  const bookings = require("../data/dev/bookings.json");
   const formattedBookings = bookings.map((booking, i) => [
     booking.property_id = getPropId(booking.property_name),
     booking.guest_id = getId(booking.guest_name),

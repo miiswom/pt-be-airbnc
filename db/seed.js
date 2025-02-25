@@ -4,13 +4,16 @@ const { insertUser, insertPropertyTypes, insertProperties, insertReviews, insert
 exports.seed = async () => {
   await createUsers();
   await createProperties();
-  await Promise.all([createPropertyTypes(), createFavourites()])
+  await createPropertyTypes();
+  await createFavourites();
   await createReviews()
   await insertUser()
   await insertProperties();
-  await Promise.all([insertPropertyTypes(), insertFavourites()])
+  await insertPropertyTypes();
+  await insertFavourites();
   await insertReviews();
   await createImages();
   await createBookings();
-  await Promise.all([insertImages(), insertBookings()]);
+  await insertImages();
+  await insertBookings();
 };
