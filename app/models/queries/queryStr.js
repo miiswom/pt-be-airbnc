@@ -9,7 +9,8 @@ exports.selectPropertiesQuery = (maxprice, minprice, sort, order, host) => {
                           location,
                           price_per_night,
                           CONCAT(first_name, ' ', surname) AS host,
-                          image_url AS image
+                          image_url AS image,
+                          property_type
                     FROM properties
                     JOIN users
                     ON properties.host_id = users.user_id
@@ -17,7 +18,7 @@ exports.selectPropertiesQuery = (maxprice, minprice, sort, order, host) => {
                     ON properties.property_id = favourites.property_id
                     JOIN images
                     ON properties.property_id = images.property_id
-                    GROUP BY properties.host_id, images.property_id, favourites.favourite_id, favourites.guest_id, favourites.property_id, property_name, location, price_per_night, host, images.image_url`
+                    GROUP BY properties.host_id, images.property_id, favourites.favourite_id, favourites.guest_id, favourites.property_id, property_name, location, price_per_night, host, images.image_url, property_type`
 
   if (maxprice) {
     values.push(maxprice);
