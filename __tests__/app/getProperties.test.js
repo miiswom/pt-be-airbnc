@@ -42,11 +42,11 @@ describe("GET /api/properties", () => {
         });
     });
 
-    test("200 - each property should contains keys of 'property_id', 'property_name', 'location', 'price_per_night' and 'host'", async () => {
+    test("200 - each property should contains keys of 'property_id', 'property_name', 'location', 'price_per_night' , 'property_type' and 'host'", async () => {
       const res = await request(app).get('/api/properties');
       const { body: { properties } } = res;
       properties.forEach((property) => {
-        expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'host', 'image'])
+        expect(property).toContainAllKeys(['property_id', 'property_name', 'location', 'price_per_night', 'host', 'image', 'property_type'])
       })
     });
 

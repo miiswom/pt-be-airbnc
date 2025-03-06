@@ -14,7 +14,7 @@
 --     WHERE property_id = 1
 --     AND check_in_date < '2025-01-06' AND check_out_date > '2025-01-01' ) RETURNING *;
 
-SELECT property_type FROM properties;
+SELECT * FROM favourites;
 -- SELECT * FROM favourites;
 -- SHOW timezone;
 -- SET SESSION timezone TO 'Etc/GMT';

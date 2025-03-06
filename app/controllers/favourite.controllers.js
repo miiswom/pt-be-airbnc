@@ -1,4 +1,4 @@
-const { createFavourite, removeFavourite  } = require("../models/favourites.models");
+const { createFavourite, removeFavourite, fetchFavourites  } = require("../models/favourites.models");
 // favourites
 
 exports.postNewFavourite = (req, res, next) => {
@@ -28,3 +28,10 @@ exports.deleteFavourite = (req, res, next) => {
       next(err)
     })
 };
+
+exports.getFavourites = (req, res, next) => {
+  fetchFavourites()
+  .then((favourites) => {
+    console.log(favourites)
+  })
+}
