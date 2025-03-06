@@ -32,6 +32,12 @@ exports.deleteFavourite = (req, res, next) => {
 exports.getFavourites = (req, res, next) => {
   fetchFavourites()
   .then((favourites) => {
-    console.log(favourites)
+    if (!favourites) {
+      next(err)
+    }
+    res.status(200).json({favourites})
+  })
+  .catch((err) => {
+    next(err)
   })
 }
