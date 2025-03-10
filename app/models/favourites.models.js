@@ -11,7 +11,7 @@ exports.fetchFavourites = () => {
 };
 
 exports.createFavourite = async (id, guest_id) => {
-  const {insertFavourites, values} = insertFavouritesQuery(id, guest_id)
+  const {insertFavourites, values} = insertFavouritesQuery(guest_id, id)
   
   return db.query(insertFavourites, values)
     .then(({ rows }) => {
