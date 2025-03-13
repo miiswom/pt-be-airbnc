@@ -16,7 +16,7 @@ exports.fetchProperties = async (maxprice, minprice, sort, order, host) => {
   })
 };
 
-exports.fetchPropertyById = async (id) => {
+exports.fetchPropertyById = (id) => {
   const { selectPropertyById } = selectPropertyByIdQuery();
   
   return db.query(selectPropertyById, [id])

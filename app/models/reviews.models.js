@@ -11,6 +11,7 @@ exports.createReview = async (id, guest_id, rating, comment) => {
       if (rows.length === 0) {
         return Promise.reject({ status: 404 })
       } else {
+        console.log("rows[0]", rows[0])
         return rows[0]
       }
     }).catch((err) => {

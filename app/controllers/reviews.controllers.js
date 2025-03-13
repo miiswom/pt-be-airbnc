@@ -7,6 +7,7 @@ exports.postNewReview = (req, res, next) => {
   const { id } = req.params
   createReview(id, guest_id, rating, comment)
     .then((review) => {
+      console.log("review", review)
       if (!review) {
         next(err)
       }

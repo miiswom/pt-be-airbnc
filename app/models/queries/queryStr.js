@@ -98,7 +98,7 @@ exports.selectReviewsByIdQuery = () => {
                       FROM reviews
                         JOIN users
                           ON reviews.guest_id = users.user_id
-                      WHERE review_id = $1`
+                      WHERE property_id = $1`
   return {selectReviewsById}
 };
 
