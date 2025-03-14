@@ -60,6 +60,7 @@ exports.calcAverageRating = async (obj) => {
 // bookings 
 
 exports.fetchPropertyBookings = (id) => {
+  console.log(id)
   return db.query(`SELECT property_id,
                           booking_id,
                           TO_CHAR(check_in_date, 'DD/MM/YYYY') AS check_in_date,
@@ -68,14 +69,11 @@ exports.fetchPropertyBookings = (id) => {
                     FROM bookings
                     WHERE property_id = $1;`, [id])
             .then(({rows}) => { 
+              console.log(rows)
               if(rows.length === 0) {
                 return Promise.reject({status: 404})
               } else {
-                return { bookings: [{booking_id: rows[0].booking_id, 
-                                    check_in_date: rows[0].check_in_date,
-                                    check_out_date: rows[0].check_out_date,
-                                    created_at: rows[0].created_at}], 
-                        property_id: rows[0].property_id }
+                return { bookings: rows }
               } })
 };
 

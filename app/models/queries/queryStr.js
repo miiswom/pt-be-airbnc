@@ -201,7 +201,7 @@ exports.selectUsersBookingByIdQuery = () => {
                                     ON bookings.property_id = properties.property_id
                                     JOIN images
                                     ON properties.property_id = images.property_id
-                                  WHERE users.user_id = $1;`;
+                                  WHERE properties.property_id = $1;`;
 
   return { selectUsersBookingById}
 }

@@ -46,7 +46,7 @@ exports.getPropertyReview = async (req, res, next) => {
 exports.getPropertyBookings = (req, res, next) => {
   const {id } = req.params;
   fetchPropertyBookings(id).then((bookings) => {
-    res.status(200).json({bookings})
+    res.status(200).json(bookings)
   }).catch((err) => {
     next(err)
   })
@@ -54,6 +54,7 @@ exports.getPropertyBookings = (req, res, next) => {
 
 exports.postPropertyBooking = (req, res, next) => {
   const { id } = req.params;
+  console.log(id)
   const { guest_id, check_in_date, check_out_date } = req.body;
 
   addPropertyBooking(id, guest_id, check_in_date, check_out_date)
