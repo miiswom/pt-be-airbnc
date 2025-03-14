@@ -62,8 +62,8 @@ exports.calcAverageRating = async (obj) => {
 exports.fetchPropertyBookings = (id) => {
   return db.query(`SELECT property_id,
                           booking_id,
-                          DATE_FORMAT(check_in_date, 'YYYY-MM-DD'),
-                          check_out_date,
+                          TO_CHAR(check_in_date, 'DD/MM/YYYY') AS check_in_date,
+                          TO_CHAR(check_out_date, 'DD/MM/YYYY') AS check_out_date,
                           created_at
                     FROM bookings
                     WHERE property_id = $1;`, [id])
