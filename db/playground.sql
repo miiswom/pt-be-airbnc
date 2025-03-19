@@ -1,4 +1,5 @@
 \c airbnc
+ SELECT * FROM users;
 
 -- UPDATE bookings 
 --     SET check_in_date = '2025-01-01', check_out_date = '2025-01-06'
@@ -14,7 +15,6 @@
 --     WHERE property_id = 1
 --     AND check_in_date < '2025-01-06' AND check_out_date > '2025-01-01' ) RETURNING *;
 
-SELECT * FROM favourites;
 -- SELECT * FROM favourites;
 -- SHOW timezone;
 -- SET SESSION timezone TO 'Etc/GMT';

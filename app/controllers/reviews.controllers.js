@@ -2,9 +2,11 @@ const { createReview, removeReview } = require("../models/reviews.models");
 
 // reviews 
 
+// ===========> route I want to protect
 exports.postNewReview = (req, res, next) => {
   const { guest_id, rating, comment } = req.body;
   const { id } = req.params
+  // ===========> where I need to verify
   createReview(id, guest_id, rating, comment)
     .then((review) => {
       console.log("review", review)

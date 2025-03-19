@@ -1,5 +1,5 @@
 const db = require("../../db/connection");
-const { selectUserByIdQuery, patchUserByIdQuery, selectUsersBookingByIdQuery } = require("./queries/queryStr")
+const { selectUserByIdQuery, patchUserByIdQuery, selectUsersBookingByIdQuery, createUserQuery } = require("./queries/queryStr")
 
 
 // users
@@ -42,4 +42,16 @@ exports.fetchUsersBooking = (id) => {
       return rows
     }
      })
+}
+
+exports.createUser = (newUser) => {
+  const { createUser } = createUserQuery()
+  
+  return db.query(createUser, [...newUser]).then(({rows}) => {
+    if(rows.length === 0) {
+      return Promise.reject({status: 404})
+    } else {
+      return rows
+    }
+  })
 }

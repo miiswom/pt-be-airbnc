@@ -1,7 +1,7 @@
 const express = require("express");
+const bookingsRouter = express.Router();
 const { deleteBooking, patchBooking } = require("../controllers/bookings.controller");
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
-const bookingsRouter = express.Router();
 
 bookingsRouter
 .route("/:id")

@@ -117,7 +117,8 @@ exports.selectUserByIdQuery = () => {
                           surname,
                           email, 
                           phone_number,
-                          avatar, 
+                          avatar,
+                          role, 
                           created_at
                       FROM users WHERE user_id = $1 `;
   return { selectUserById }
@@ -204,5 +205,29 @@ exports.selectUsersBookingByIdQuery = () => {
                                   WHERE properties.property_id = $1;`;
 
   return { selectUsersBookingById}
+}
+
+exports.selectUserByCredentialsQuery = () => {
+  const selectUserByCredentials = `SELECT user_id,
+                          first_name,
+                          surname,
+                          email, 
+                          phone_number,
+                          password_hash,
+                          avatar FROM users WHERE email = $1;`
+  return {selectUserByCredentials}
+};
+
+exports.createUserQuery = () => {
+  const createUser = `INSERT INTO users( 
+      first_name, 
+      surname, 
+      email, 
+      phone_number, 
+      role, 
+      avatar, 
+      password_hash) VALUES ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt('bf', 10))) RETURNING *;`
+
+      return { createUser }
 }
 

@@ -18,7 +18,26 @@ function getPropId(property_name) {
   return id + 1
 };
 
-exports.insertUser = () => {
+// exports.insertUser = () => {
+//   const users = require("../data/dev/users.json")
+//     .map((user) => [
+//     user.first_name,
+//     user.surname,
+//     user.email,
+//     user.phone_number,
+//     user.role,
+//     user.avatar])
+
+//   return db.query(format(`INSERT INTO users( first_name, 
+//                                       surname, 
+//                                       email, 
+//                                       phone_number, 
+//                                       role, 
+//                                       avatar, ) VALUES %L RETURNING *;`, users))
+//     .then(({ rows }) => { return rows })
+// };
+
+exports.insertUser = async () => {
   const users = require("../data/dev/users.json")
     .map((user) => [
     user.first_name,
@@ -26,18 +45,23 @@ exports.insertUser = () => {
     user.email,
     user.phone_number,
     user.role,
-    user.avatar])
+    user.avatar,
+  user.password])
 
-  return db.query(format(`INSERT INTO users( first_name, 
-                                      surname, 
-                                      email, 
-                                      phone_number, 
-                                      role, 
-                                      avatar) VALUES %L RETURNING *;`, users))
-    .then(({ rows }) => { return rows })
-
+  // console.log(users)
+  for(let i=0; i<users.length; i++) {
+    // console.log(users[i][0])
+   await db.query(`INSERT INTO users( 
+      first_name, 
+      surname, 
+      email, 
+      phone_number, 
+      role, 
+      avatar, 
+      password_hash) VALUES ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt('bf', 10))) RETURNING *;`, [users[i][0], users[i][1], users[i][2], users[i][3], users[i][4], users[i][5], users[i][6]])
+      .then(({ rows }) => { return rows })
+  }   
 };
-
 exports.insertPropertyTypes = () => {
   const formattedPropTypes = require("../data/dev/property-types.json")
     .map((type) => [type.property_type,
