@@ -2,7 +2,7 @@
 const db = require("../connection");
 
 exports.createExtensions = async() => {
-  await db.query(`DROP EXTENSION IF EXISTS pgcrypto;`)
+  await db.query(`DROP EXTENSION IF EXISTS pgcrypto CASCADE;`)
   await db.query(`CREATE EXTENSION pgcrypto;`)
 }
 exports.createUsers = async() => {
@@ -13,7 +13,7 @@ exports.createUsers = async() => {
                         CONSTRAINT ch_first_name CHECK(REGEXP_LIKE(first_name, '[a-zA-Z]')),
                       surname VARCHAR NOT NULL,
                         CONSTRAINT ch_surname CHECK(REGEXP_LIKE(surname, '[a-zA-Z]')),
-                      email VARCHAR NOT NULL,
+                      email VARCHAR NOT NULL UNIQUE,
                        CONSTRAINT ch_email CHECK(REGEXP_LIKE(email, '^[a-zA-Z._0-9-]+@[a-z]+.(co(m|.uk)|net|fr)$')),
                       phone_number VARCHAR,
                         CONSTRAINT ch_phone_number CHECK(REGEXP_LIKE(phone_number, '[0-9]')),

@@ -104,6 +104,12 @@ app.use("*", handleBadRequest, handleNotFound )
 module.exports = app;
 
 // {
+//   "email" : "alice@example.com",
+//   "password": "111111111111"
+// }
+
+
+// {
 //   "guest_id": "1",
 //   "rating": "2",
 //   "comment": "testing once again..."

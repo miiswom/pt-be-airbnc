@@ -3,6 +3,7 @@ const {getProperties, getPropertyById, getPropertyReview, getPropertyBookings, p
 const { postNewFavourite } = require("../controllers/favourite.controllers");
 const { postNewReview } = require("../controllers/reviews.controllers")
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
+const { verifyToken } = require("../controllers/utils/verifyToken")
 const propertiesRouter = express.Router();
 
 // properties router //
@@ -21,7 +22,7 @@ propertiesRouter
 propertiesRouter
 .route("/:id/reviews")
 .get(getPropertyReview)
-.post(postNewReview);
+.post(verifyToken, postNewReview);
 
 // bookings 
 propertiesRouter

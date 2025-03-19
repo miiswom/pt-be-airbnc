@@ -1,5 +1,5 @@
 // (2) ===========> function to verify token
-function verifyToken(req, res, next) {
+exports.verifyToken = (req, res, next) => {
   // get the auth header value so that when we send out token, we send it to the header
   const bearerHeader = req.headers['authorization']
 
