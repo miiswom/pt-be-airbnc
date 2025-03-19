@@ -116,6 +116,7 @@ exports.selectUserByIdQuery = () => {
                           first_name,
                           surname,
                           email, 
+                          password_hash,
                           phone_number,
                           avatar,
                           role, 
@@ -150,6 +151,12 @@ exports.patchUserByIdQuery = (id, first_name, surname, email, phone_number, avat
     valuesCount++
     updateSets.push(` email= $${valuesCount}`);
   };
+
+  // if (password_hash) {
+  //   values.push(password_hash);
+  //   valuesCount++
+  //   updateSets.push(` password_hash = $${valuesCount}`);
+  // };
 
   if (phone_number) {
     values.push(phone_number);
