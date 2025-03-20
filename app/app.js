@@ -11,6 +11,9 @@ const { TOKEN_SECRET} = process.env
 
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
+
+app.use(cookieParser())
+
 app.use(cors({
   origin: [`http://localhost:5173`],
   credentials: "include",
@@ -18,7 +21,6 @@ app.use(cors({
     "Access-Control-Allow-Credentials":true
   }
 }))
-app.use(cookieParser())
 
 app.use("/api", apiRouter);
 

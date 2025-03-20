@@ -90,7 +90,7 @@ exports.getUserToken = ((req, res, next) => {
 
     res
     .cookie('access_token', token, {httpOnly: true,})
-    .status(200).json({msg: `Welcome back ${user.first_name}!`})
+    .status(200).json({msg: `Welcome back ${user.first_name}!`, token})
   }).catch((err) => {
     console.log(err)
     res.status(401).json({ msg: "User not found.", auth: false })
