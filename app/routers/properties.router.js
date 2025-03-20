@@ -3,7 +3,8 @@ const {getProperties, getPropertyById, getPropertyReview, getPropertyBookings, p
 const { postNewFavourite } = require("../controllers/favourite.controllers");
 const { postNewReview } = require("../controllers/reviews.controllers")
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
-const { verifyToken } = require("../controllers/utils/verifyToken")
+const { verifyToken } = require("./utils/verifyToken");
+const { JWTAuthMiddleware } = require("./utils/JWTAuthMiddleware");
 const propertiesRouter = express.Router();
 
 // properties router //
@@ -22,7 +23,8 @@ propertiesRouter
 propertiesRouter
 .route("/:id/reviews")
 .get(getPropertyReview)
-.post(verifyToken, postNewReview);
+// .post(verifyToken, postNewReview);
+.post(JWTAuthMiddleware, postNewReview);
 
 // bookings 
 propertiesRouter
