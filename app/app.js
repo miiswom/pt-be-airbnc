@@ -3,6 +3,7 @@ const path = require("path")
 const { handleNotFound, handleBadRequest, handleInvalidEndpoint } = require("./controllers/errors/handlingErrors")
 const app = express();
 const apiRouter = require("./routers/api.router");
+const cookieParser = require("cookie-parser")
 const cors = require("cors");
 
 app.use(express.json());
@@ -11,6 +12,8 @@ app.use(cors({
   origin: `http://localhost:5173`,
   credentials: true
 }))
+app.use(cookieParser())
+
 app.use("/api", apiRouter);
 
 // invalid enpoint //
