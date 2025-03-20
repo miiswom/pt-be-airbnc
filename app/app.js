@@ -7,7 +7,7 @@ const cors = require("cors")
 
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
-app.use(cors())
+app.use(cors("*"))
 app.use("/api", apiRouter);
 
 // invalid enpoint //
