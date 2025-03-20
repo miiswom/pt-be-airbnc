@@ -11,7 +11,6 @@ exports.getUserToken = ((req, res, next) => {
   const { email, password } = req.body;
   const user = { email, password }
   console.log(user)
-
   // fetching and checking the user's exist:
   fetchUserByCredentials(email).then(async (user) => {
     // const password_hash = await bcrypt.hash(password, 10);

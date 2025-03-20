@@ -3,12 +3,12 @@ const path = require("path")
 const { handleNotFound, handleBadRequest, handleInvalidEndpoint } = require("./controllers/errors/handlingErrors")
 const app = express();
 const apiRouter = require("./routers/api.router");
-const cors = require("cors")
+const cors = require("cors");
 
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cors({
-  origin: "*",
+  origin: `http://localhost:100000`,
   credentials: true
 }))
 app.use("/api", apiRouter);
