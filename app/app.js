@@ -8,7 +8,7 @@ const cors = require("cors");
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cors({
-  origin: `http://localhost:100000`,
+  origin: `http://localhost:10000`,
   credentials: true
 }))
 app.use("/api", apiRouter);
