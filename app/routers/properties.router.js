@@ -6,6 +6,7 @@ const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors
 const { verifyToken } = require("./utils/verifyToken");
 const { JWTAuthMiddleware } = require("./utils/JWTAuthMiddleware");
 const propertiesRouter = express.Router();
+const {verifyJWT} = require("./utils/verifyJWT")
 
 // properties router //
 propertiesRouter
@@ -14,7 +15,7 @@ propertiesRouter
 
 propertiesRouter
 .route("/:id")
-.get(JWTAuthMiddleware, getPropertyById)
+.get(verifyJWT, getPropertyById)
 
 propertiesRouter
 .route("/:id/favourite")

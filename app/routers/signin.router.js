@@ -1,12 +1,12 @@
 const express = require("express");
-const siginRouter =  express.Router();
+const signinRouter =  express.Router();
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
 const {getUserToken} = require("../controllers/signin.controller")
 
-siginRouter
+signinRouter
 .route("")
 .post(getUserToken)
 .all(handleMethodNotAllowed);
 
 
-module.exports = siginRouter;
+module.exports = signinRouter;

@@ -11,43 +11,13 @@ const { TOKEN_SECRET} = process.env
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cors({
-  origin: `http://localhost:5173`,
-  credentials: true
+  origin: [`http://localhost:5173`],
+  credentials: true,
 }))
 app.use(cookieParser())
 
-app.use(session({
-  key: "userId",
-  secret: TOKEN_SECRET,
-  resave: false,
-  saveUninitialized: false, 
-  cookie: {
-    expires: 60 * 60 * 24
-  }
-}))
-
 app.use("/api", apiRouter);
 
-const verifyJWT = (req, res, next) => {
-  const token = req.headers["x-access-token"];
-  
-  if(!token) {
-    res.status(401).json({msg: "You need a token"})
-  } else {
-    jwt.verify(token , TOKEN_SECRET, (err, decoded) => {
-      if(err) {
-        res.status().json({auth: false, msg: "Authentication failed."})
-      } else {
-        req.userId = decoded.user_id;
-        next()
-      }
-    })
-  }
-}
-
-app.get("/isUserAuth", verifyJWT, (req , res) => {
-  res.json({msg: "You are authenticated"})
-})
 // invalid enpoint //
 app.all("*", handleInvalidEndpoint);
 
@@ -55,13 +25,6 @@ app.all("*", handleInvalidEndpoint);
 app.use("*", handleBadRequest, handleNotFound )
 
 module.exports = app;
-
-
-
-
-
-
-
 
 // {
 //   "email" : "alice@example.com",
@@ -76,9 +39,9 @@ module.exports = app;
 // }
 
 // {
-//   "firstname": "Test",
-//   "surname": "Numberone",
-//   "email": ""numberone@example.com",
+//   "first_name": "Noura",
+//   "surname": "Fahed",
+//   "email": "numberone@example.com",
 //   "password": "numberone111",
 //   "phone_number": "+44 7000 151515",
 //   "role": "guest",
@@ -86,8 +49,8 @@ module.exports = app;
 // }
 
 // {
-//   "firstname": "Test",
-//   "surname": "Numbertwo",
+//   "firstname": "Gemma",
+//   "surname": "Doherty",
 //   "email": "numbertwo@example.com",
 //   "password": "numberone222",
 //   "phone_number": "+44 7000 161616",
