@@ -5,6 +5,8 @@ const app = express();
 const apiRouter = require("./routers/api.router");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
+const session = require("express-session")
+const { TOKEN_SECRET} = process.env
 
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
@@ -14,8 +16,38 @@ app.use(cors({
 }))
 app.use(cookieParser())
 
+app.use(session({
+  key: "userId",
+  secret: TOKEN_SECRET,
+  resave: false,
+  saveUninitialized: false, 
+  cookie: {
+    expires: 60 * 60 * 24
+  }
+}))
+
 app.use("/api", apiRouter);
 
+const verifyJWT = (req, res, next) => {
+  const token = req.headers["x-access-token"];
+  
+  if(!token) {
+    res.status(401).json({msg: "You need a token"})
+  } else {
+    jwt.verify(token , TOKEN_SECRET, (err, decoded) => {
+      if(err) {
+        res.status().json({auth: false, msg: "Authentication failed."})
+      } else {
+        req.userId = decoded.user_id;
+        next()
+      }
+    })
+  }
+}
+
+app.get("/isUserAuth", verifyJWT, (req , res) => {
+  res.json({msg: "You are authenticated"})
+})
 // invalid enpoint //
 app.all("*", handleInvalidEndpoint);
 
