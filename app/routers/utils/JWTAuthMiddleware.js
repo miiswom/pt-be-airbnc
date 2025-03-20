@@ -1,11 +1,11 @@
 const jwt = require("jsonwebtoken")
 const { TOKEN_SECRET } = process.env
 exports.JWTAuthMiddleware = (req, res, next) => {
-
+  console.log(req.cookies)
   const token = req.cookies.accessToken;
 
   try {
-    if(!token || undefined) {
+    if(!token || token === undefined) {
       res.status(401).json({msg: "Sorry, unauthorised access."})
     }
     jwt.verify(token, TOKEN_SECRET, (err, user) => {
@@ -18,6 +18,6 @@ exports.JWTAuthMiddleware = (req, res, next) => {
       next()
     })
   } catch (err) {
-    console.log(err)
+    console.log("err", err)
   }
 }

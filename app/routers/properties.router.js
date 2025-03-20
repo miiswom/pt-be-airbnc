@@ -14,7 +14,7 @@ propertiesRouter
 
 propertiesRouter
 .route("/:id")
-.get(getPropertyById)
+.get(JWTAuthMiddleware, getPropertyById)
 
 propertiesRouter
 .route("/:id/favourite")
@@ -24,7 +24,7 @@ propertiesRouter
 .route("/:id/reviews")
 .get(getPropertyReview)
 // .post(verifyToken, postNewReview);
-.post(JWTAuthMiddleware, postNewReview);
+.post(postNewReview);
 
 // bookings 
 propertiesRouter
