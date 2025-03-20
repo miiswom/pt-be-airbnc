@@ -38,20 +38,20 @@ exports.getUserToken = ((req, res, next) => {
           secure: true,
           path: "http://localhost:5173" 
        })
-      // req.session.user = user;
-      // console.log("req.session.user", req.session.user)
+      req.session.user = user;
+      console.log("req.session.user", req.session.user)
 
-      // const user_id = user.user_id;
-      // console.log(user_id)
+      const user_id = user.user_id;
+      console.log(user_id)
       
-      // const token =  jwt.sign({ user }, TOKEN_SECRET, {expiresIn: 300})
-      // res.status(200).json(
-      //   {
-      //     msg: "User logged in successfully", 
-      //     auth: true,
-      //     token: token,
-      //     user: user
-      //   })
+      const token =  jwt.sign({ user }, TOKEN_SECRET, {expiresIn: 300})
+      res.status(200).json(
+        {
+          msg: "User logged in successfully", 
+          auth: true,
+          token: token,
+          user: user
+        })
 
     } else {
       res.status(403).json({ msg: "Incorrect credentials.", auth: false })
