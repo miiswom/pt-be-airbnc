@@ -22,36 +22,36 @@ exports.getUserToken = ((req, res, next) => {
       // jwt.sign({ user }, TOKEN_SECRET, (err, token) => {
       //   res.json({ token })
       // })
-      // const accessToken = generateAcessToken(user);
-      // res.cookie(ACCESS_TOKEN, accessToken, 
-      //   { 
-      //     httpOnly: true, 
-      //     secure: true, 
-      //     path: "http://localhost:5173" 
-      //   });
+      const accessToken = generateAcessToken(user);
+      res.cookie(ACCESS_TOKEN, accessToken, 
+        { 
+          httpOnly: true, 
+          secure: true, 
+          path: "http://localhost:5173" 
+        });
 
-      //   console.log("accessToken", accessToken)
-      // const refreshToken = generateRefreshToken(user);
-      // res.cookie(REFRESH_TOKEN, refreshToken, 
-      //   {
-      //     httpOnly: true,
-      //     secure: true,
-      //     path: "http://localhost:5173" 
-      //  })
-      req.session.user = user;
+        console.log("accessToken", accessToken)
+      const refreshToken = generateRefreshToken(user);
+      res.cookie(REFRESH_TOKEN, refreshToken, 
+        {
+          httpOnly: true,
+          secure: true,
+          path: "http://localhost:5173" 
+       })
+      // req.session.user = user;
       // console.log("req.session.user", req.session.user)
 
-      const user_id = user.user_id;
+      // const user_id = user.user_id;
       // console.log(user_id)
       
-      const token =  jwt.sign({ user }, TOKEN_SECRET, {expiresIn: 300})
-      res.status(200).json(
-        {
-          msg: "User logged in successfully", 
-          auth: true,
-          token: token,
-          user: user
-        })
+      // const token =  jwt.sign({ user }, TOKEN_SECRET, {expiresIn: 300})
+      // res.status(200).json(
+      //   {
+      //     msg: "User logged in successfully", 
+      //     auth: true,
+      //     token: token,
+      //     user: user
+      //   })
 
     } else {
       res.status(403).json({ msg: "Incorrect credentials.", auth: false })
