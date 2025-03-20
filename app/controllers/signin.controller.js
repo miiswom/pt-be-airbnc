@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const { TOKEN_SECRET } = process.env;
+const TOKEN_SECRET = process.env.TOKEN_SECRET;
 const bcrypt = require("bcrypt")
 const { fetchUserByCredentials } = require("../models/signin.models");
 const { generateAcessToken, generateRefreshToken } = require("./utils/generateTokens");
@@ -31,6 +31,7 @@ exports.getUserToken = ((req, res, next) => {
           path: "/" 
         });
 
+        console.log("accessToken", accessToken)
       const refreshToken = generateRefreshToken(user);
       res.cookie(REFRESH_TOKEN, refreshToken, 
         {
