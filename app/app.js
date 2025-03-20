@@ -12,7 +12,7 @@ const { TOKEN_SECRET} = process.env
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cors({
-  origin: [`http://localhost:9090`],
+  origin: [`http://localhost:5173`],
   credentials: "include",
   header : {
     "Access-Control-Allow-Credentials":true
