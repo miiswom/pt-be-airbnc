@@ -46,17 +46,18 @@ exports.getUserToken = ((req, res, next) => {
       
       const token =  jwt.sign({ user }, TOKEN_SECRET, {expiresIn: 300})
       res.status(200).json(
-        {msg: "User logged in successfully", 
-        auth: true,
-        token: token,
-        user: user
-      })
+        {
+          msg: "User logged in successfully", 
+          auth: true,
+          token: token,
+          user: user
+        })
 
     } else {
-      res.status(403).json({ msg: "Incorrect credentials." })
+      res.status(403).json({ msg: "Incorrect credentials.", auth: false })
     }
   }).catch((err) => {
     console.log(err)
-    res.status(401).json({ msg: "Sorry, user not found." })
+    res.status(401).json({ msg: "User not found.", auth: false })
   })
 })
