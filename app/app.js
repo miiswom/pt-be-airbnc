@@ -5,14 +5,18 @@ const app = express();
 const apiRouter = require("./routers/api.router");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
-const session = require("cookie-session")
+const session = require("cookie-session");
+const { header } = require("express/lib/response");
 const { TOKEN_SECRET} = process.env
 
 app.use(express.json());
 app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cors({
-  origin: [`http://localhost:5173`],
+  origin: [`http://localhost:9090`],
   credentials: "include",
+  header : {
+    "Access-Control-Allow-Credentials":true
+  }
 }))
 app.use(cookieParser())
 
