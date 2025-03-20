@@ -22,22 +22,22 @@ exports.getUserToken = ((req, res, next) => {
       // jwt.sign({ user }, TOKEN_SECRET, (err, token) => {
       //   res.json({ token })
       // })
-      const accessToken = generateAcessToken(user);
-      res.cookie(ACCESS_TOKEN, accessToken, 
-        { 
-          httpOnly: true, 
-          secure: true, 
-          path: "http://localhost:5173" 
-        });
+      // const accessToken = generateAcessToken(user);
+      // res.cookie(ACCESS_TOKEN, accessToken, 
+      //   { 
+      //     httpOnly: true, 
+      //     secure: true, 
+      //     path: "http://localhost:5173" 
+      //   });
 
-        console.log("accessToken", accessToken)
-      const refreshToken = generateRefreshToken(user);
-      res.cookie(REFRESH_TOKEN, refreshToken, 
-        {
-          httpOnly: true,
-          secure: true,
-          path: "http://localhost:5173" 
-       })
+      //   console.log("accessToken", accessToken)
+      // const refreshToken = generateRefreshToken(user);
+      // res.cookie(REFRESH_TOKEN, refreshToken, 
+      //   {
+      //     httpOnly: true,
+      //     secure: true,
+      //     path: "http://localhost:5173" 
+      //  })
       req.session.user = user;
       console.log("req.session.user", req.session.user)
 

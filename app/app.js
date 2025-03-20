@@ -5,7 +5,7 @@ const app = express();
 const apiRouter = require("./routers/api.router");
 const cookieParser = require("cookie-parser")
 const cors = require("cors");
-const session = require("express-session")
+const session = require("cookie-session")
 const { TOKEN_SECRET} = process.env
 
 app.use(express.json());
