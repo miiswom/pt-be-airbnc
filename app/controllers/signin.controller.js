@@ -27,7 +27,7 @@ exports.getUserToken = ((req, res, next) => {
         { 
           httpOnly: true, 
           secure: true, 
-          path: "/" 
+          path: "http:localhost:5173" 
         });
 
         console.log("accessToken", accessToken)
@@ -36,7 +36,7 @@ exports.getUserToken = ((req, res, next) => {
         {
           httpOnly: true,
           secure: true,
-          path: "/"
+          path: "http:localhost:5173" 
         })
 
       res.status(200).json({msg: "User logged in successfully", user})
