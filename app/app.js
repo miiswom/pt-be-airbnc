@@ -15,17 +15,14 @@ app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cookieParser())
 
 app.use(cors({
-  origin: [`http://localhost:5173`],
+  origin: [`https://localhost:5173`],
   credentials: "include"
 }));
 
 app.use((req, res, next) => {
-  res.header('Content-Type', 'application/json;charset=UTF-8')
-  res.header('Access-Control-Allow-Credentials', true)
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  )
+  res.setHeader('Access-Control-Allow-Origin', 'https://localhost:5173')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
+  res.setHeader('Access-Control-Allow-Credentials', true)
   next()
 })
 
