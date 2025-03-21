@@ -15,12 +15,12 @@ app.use("/index", express.static(path.join(__dirname, 'public')))
 app.use(cookieParser())
 
 app.use(cors({
-  origin: [`https://pt-be-airbnc.onrender.com`],
+  origin: [`http://localhost:5173`, `https://localhost:5173`,`https://pt-be-airbnc.onrender.com`, `http://pt-be-airbnc.onrender.com`],
   credentials: "include"
 }));
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'https://pt-be-airbnc.onrender.com')
+  res.setHeader('Access-Control-Allow-Origin', [`http://localhost:5173`, `https://localhost:5173`,`https://pt-be-airbnc.onrender.com`, `http://pt-be-airbnc.onrender.com`])
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST')
   res.setHeader('Access-Control-Allow-Credentials', true)
   next()
