@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { TOKEN_SECRET} = process.env
+const { TOKEN_SECRET } = process.env
 
 
 // (2) ===========> function to verify token
@@ -20,17 +20,19 @@ exports.verifyToken = (req, res, next) => {
 
   const authHeaders = req.headers['authorization'];
   console.log(authHeaders)
-
-  if(authHeaders) {
-    const token = authHeaders.split(" ")[1];
-    const decodedToken = jwt.verify(token, TOKEN_SECRET)
-    console.log(decodedToken)
-    if(decodedToken) {
-      next()
+  try {
+    if (!authHeaders) {
+      res.status(401).json({ msg: "You need a token, unauthorised access." })
     } else {
-      res.status(403).json({msg: "Forbidden access"})
+      const token = authHeaders.split(" ")[1];
+      const decodedToken = jwt.verify(token, TOKEN_SECRET)
+      console.log(decodedToken)
+
+      // res.status(200).json({ msg: "Authorised access!" })
+      next()
     }
-  } else {
-    res.status(401).json({msg: "Unauthorised."})
+  } catch (err) {
+    // console.log("err", err)
+    res.status(403).json({ msg: "Invalid token, forbidden access." })
   }
 }
