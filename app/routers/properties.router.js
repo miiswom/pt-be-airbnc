@@ -15,7 +15,7 @@ propertiesRouter
 
 propertiesRouter
 .route("/:id")
-.get(verifyJWT, getPropertyById)
+.get(verifyToken, getPropertyById)
 
 propertiesRouter
 .route("/:id/favourite")

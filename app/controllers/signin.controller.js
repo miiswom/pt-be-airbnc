@@ -32,6 +32,6 @@ exports.getUserToken = ((req, res, next) => {
     
     res
       .status(401)
-      .json({ msg: "User not found.", auth: false })
+      .json({ msg: "User not found.", success: false })
   })
 })
