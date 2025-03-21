@@ -90,7 +90,7 @@ exports.getUserToken = ((req, res, next) => {
 
     res
     .cookie('access_token', token, { 
-      sameSite: none, 
+      sameSite: "none", 
       httpOnly: true, secure: true, 
       path: "http://localhost:5173" }) 
     .status(200).json({msg: `Welcome back ${user.first_name}!`, token})
