@@ -89,7 +89,10 @@ exports.getUserToken = ((req, res, next) => {
     const token = jwt.sign(payload, TOKEN_SECRET, {expiresIn: "1d"})
 
     res
-    .cookie('access_token', token, { httpOnly: true, secure: true, path: "http://localhost:5173" }) 
+    .cookie('access_token', token, { 
+      sameSite: none, 
+      httpOnly: true, secure: true, 
+      path: "http://localhost:5173" }) 
     .status(200).json({msg: `Welcome back ${user.first_name}!`, token})
   }).catch((err) => {
     console.log(err)
