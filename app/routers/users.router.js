@@ -1,7 +1,7 @@
 const express = require("express");
 const { getUserById, patchUser, getUsersBookings} = require("../controllers/users.controllers");
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors")
-const { verifyToken} = require("./utils/verifyToken")
+const { verifyToken} = require("./utils/verifyAuth")
 const usersRouter = express.Router()
 
 // users router //
