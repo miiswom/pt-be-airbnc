@@ -18,20 +18,14 @@ exports.getUserToken = ((req, res, next) => {
     console.log(passwordMatch)
 
     if (!passwordMatch) {
-      res.status(400).json({ msg: "Incorrect password." })
-    }
-    
-    const payload = { id: user.user_id }
-    const token = jwt.sign(payload, TOKEN_SECRET, { expiresIn: "1d" })
-
-    res
-      .status(200)
-      .json({ msg: `Welcome back ${user.first_name}!`, success: true, token })
+    res.status(400).json({ msg: "Incorrect password." })
+      // next()
+    } else {
+      const payload = { id: user.user_id }
+      const token = jwt.sign(payload, TOKEN_SECRET, { expiresIn: "1d" })
+    res.status(201).json({ msg: `Welcome back ${user.first_name}!`, success: true, token })
+  }
   }).catch((err) => {
-    console.log(err)
-    
-    res
-      .status(401)
-      .json({ msg: "User not found.", success: false })
+    res.status(401).json({ msg: "User not found.", success: false })
   })
 })

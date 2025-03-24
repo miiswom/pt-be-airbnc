@@ -18,7 +18,7 @@ exports.verifyAuth = async (req, res, next) => {
         }
       })
     } catch(err) {
-      console.log(err)
+      // console.log(err)
       res.status(404).json({msg: "Invalid credentials."})
     }
   } else {
