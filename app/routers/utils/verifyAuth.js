@@ -16,12 +16,12 @@ exports.verifyAuth = async (req, res, next) => {
         } else {
           next()
         }
-        
       })
     } catch(err) {
       console.log(err)
+      res.status(404).json({msg: "Invalid credentials."})
     }
   } else {
-    res.status(404).json({msg: "You need a token."})
+    res.status(401).json({msg: "You need a token."})
   }
 }
