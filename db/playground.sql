@@ -1,5 +1,5 @@
 \c airbnc
- SELECT first_name FROM users;
+ SELECT * FROM users;
 
 -- UPDATE bookings 
 --     SET check_in_date = '2025-01-01', check_out_date = '2025-01-06'

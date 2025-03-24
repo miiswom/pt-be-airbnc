@@ -1,13 +1,13 @@
 const express = require("express");
 const { getUserById, patchUser, getUsersBookings} = require("../controllers/users.controllers");
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors")
-const { verifyToken} = require("./utils/verifyAuth")
+const { verifyAuth} = require("./utils/verifyAuth")
 const usersRouter = express.Router()
 
 // users router //
 usersRouter
 .route('/:id')
-.get(verifyToken, getUserById)
+.get(verifyAuth, getUserById)
 .patch(patchUser)
 .all(handleMethodNotAllowed);
 

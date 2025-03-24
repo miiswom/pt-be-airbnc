@@ -12,20 +12,16 @@ createUser(newUser).then((newUser) => {
     console.log(newUser)
     res.status(400).json({msg: "An error occured."})
   } else {
-
     // const token = jwt.sign({newUser, iat: Date.now()}, TOKEN_SECRET)
     // res.status(201).json({token})
-    const payload = {
-      id: newUser[0].user_id
-    }
+    const payload = { id: newUser[0].user_id }
     const token = jwt.sign(payload, TOKEN_SECRET, {expiresIn: "1d"})
 
-    res.cookie('access_token', token, 
-      {
-        httpOnly: true,
-      }
-    ).status(200).json({
-      username: `Successful sign-up, welcome ${newUser[0].first_name}!`
+    res
+    .status(200)
+    .json({
+      msg: `Successful sign-up, welcome ${newUser[0].first_name}!`,
+      token: token
     })
   }
 }).catch((err) => {

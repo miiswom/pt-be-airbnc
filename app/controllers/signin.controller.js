@@ -20,7 +20,7 @@ exports.getUserToken = ((req, res, next) => {
     if (!passwordMatch) {
       res.status(400).json({ msg: "Incorrect password." })
     }
-
+    
     const payload = { id: user.user_id }
     const token = jwt.sign(payload, TOKEN_SECRET, { expiresIn: "1d" })
 
