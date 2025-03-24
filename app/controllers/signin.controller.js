@@ -23,7 +23,7 @@ exports.getUserToken = ((req, res, next) => {
     } else {
       const payload = { id: user.user_id }
       const token = jwt.sign(payload, TOKEN_SECRET, { expiresIn: "1d" })
-    res.status(201).json({ msg: `Welcome back ${user.first_name}!`, success: true, token })
+    res.status(201).json({ user_id: payload.id, success: true, token })
   }
   }).catch((err) => {
     res.status(401).json({ msg: "User not found.", success: false })
