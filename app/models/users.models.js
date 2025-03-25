@@ -1,13 +1,15 @@
 const db = require("../../db/connection");
-const { selectUserByIdQuery, patchUserByIdQuery, selectUsersBookingByIdQuery, createUserQuery } = require("./queries/queryStr")
+const { selectUserByIdQuery, patchUserByIdQuery, selectUsersBookingByIdQuery, createUserQuery , selectUserReviewsQuery, selectUserPropertiesQuery} = require("./queries/queryStr")
 
 
 // users
 
 exports.fetchUserById = async (id) => {
   const { selectUserById } = selectUserByIdQuery()
-  
+
+  console.log( selectUserById)
   return db.query(selectUserById, [id]).then(({ rows }) => {
+    console.log(rows)
     if (rows.length === 0) {
       return Promise.reject({ status: 404 })
     } else {
@@ -42,4 +44,29 @@ exports.fetchUsersBooking = (id) => {
       return rows
     }
      })
+};
+
+exports.fetchUserReviews = (id) => {
+  const {selectUserReviews} = selectUserReviewsQuery()
+
+  return db.query(selectUserReviews, [id]).then(({rows}) => {
+    console.log("rows", rows)
+    if(rows.length === 0) {
+      return Promise.reject({status: 404})
+    } else {
+      return rows
+    }
+  })
+};
+
+exports.fetchUserProperties = (id) => {
+  const { selectUserProperties} = selectUserPropertiesQuery();
+
+  return db.query(selectUserProperties, [id]).then(({rows}) => {
+    if(rows.length === 0) {
+      return Promise.reject({status: 404})
+    } else {
+      return rows;
+    }
+  })
 }

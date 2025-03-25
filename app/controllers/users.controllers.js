@@ -1,4 +1,4 @@
-const { fetchUserById, updateUser, fetchUsersBooking } = require("../models/users.models")
+const { fetchUserById, updateUser, fetchUsersBooking, fetchUserReviews, fetchUserProperties } = require("../models/users.models")
 
 
 // users 
@@ -32,6 +32,29 @@ exports.getUsersBookings = (req, res, next) => {
 
     res.status(200).json({bookings})
   }).catch((err) => {
+    next(err)
+  })
+};
+
+exports.getUserReviews = (req, res, next) => {
+  const { id } = req.params;
+
+  fetchUserReviews(id).then((reviews) => {
+    console.log("reviews", reviews)
+    res.status(200).json({reviews})
+  
+  }).catch((err) => {
+    next(err)
+  })
+};
+
+exports.getUserProperties = (req, res, next) => {
+  const { id } = req.params;
+
+  fetchUserProperties(id).then((properties) => {
+   res.status(200).json({properties})
+  })
+  .catch((err) => {
     next(err)
   })
 }

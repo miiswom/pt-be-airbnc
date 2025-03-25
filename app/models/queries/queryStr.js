@@ -237,5 +237,17 @@ exports.createUserQuery = () => {
       password_hash) VALUES ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt('bf', 10))) RETURNING *;`
 
       return { createUser }
+};
+
+exports.selectUserReviewsQuery = () => {
+  const selectUserReviews = `SELECT * FROM reviews WHERE guest_id = $1;`
+
+  return { selectUserReviews }
+};
+
+exports.selectUserPropertiesQuery = () => {
+  const selectUserProperties = `SELECT * FROM properties WHERE host_id = $1;`
+
+  return { selectUserProperties }
 }
 
