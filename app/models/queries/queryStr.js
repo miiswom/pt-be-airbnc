@@ -93,6 +93,7 @@ exports.selectReviewsByIdQuery = () => {
                           comment,
                           rating,
                           reviews.created_at,
+                          users.user_id,
                           CONCAT(first_name, ' ', surname) AS guest,
                           avatar AS guest_avatar
                       FROM reviews

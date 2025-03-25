@@ -31,6 +31,8 @@ exports.fetchPropertyById = (id) => {
     })
 };
 
+// reviews
+
 exports.fetchPropertyReviews = (id) => {
   const { selectReviewsById } = selectReviewsByIdQuery()
   
