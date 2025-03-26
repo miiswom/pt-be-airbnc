@@ -1,5 +1,6 @@
 \c airbnc 
 
+SELECT first_name FROM users;
 -- query for host
 -- SELECT user_id,
 --       first_name,
@@ -17,13 +18,13 @@
 --   GROUP BY (user_id, properties.property_id);
 
 -- fetch users (guest) bookings ---> /api/users/:id/bookings
-SELECT * FROM bookings WHERE guest_id = 2;
+-- SELECT * FROM bookings WHERE guest_id = 2;
 
 -- fetch users (guest) reviews ---> /api/users/:id/reviews
-SELECT * FROM reviews WHERE guest_id = 2;
+-- SELECT * FROM reviews WHERE guest_id = 2;
 
 -- fetch users (host) properties ---> /api/users/:id/properties
-SELECT * FROM properties WHERE host_id = 1;
+-- SELECT * FROM properties WHERE host_id = 1;
 -- UPDATE bookings 
 --     SET check_in_date = '2025-01-01', check_out_date = '2025-01-06'
 --     WHERE property_id = 1
