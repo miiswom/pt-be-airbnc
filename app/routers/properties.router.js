@@ -20,7 +20,7 @@ propertiesRouter
 
 propertiesRouter
 .route("/:id/favourite")
-.post(postNewFavourite);
+.post(verifyAuth, postNewFavourite);
 
 propertiesRouter
 .route("/:id/reviews")

@@ -11,7 +11,7 @@ favouriteRouter
 
 favouriteRouter
 .route("/:id")
-.delete(deleteFavourite)
+.delete( verifyAuth, deleteFavourite)
 .all(handleMethodNotAllowed)
 
 module.exports = favouriteRouter;
