@@ -8,10 +8,12 @@ const bookingsRouter = require("./bookings.router")
 const signinRouter = require("./signin.router");
 const singupRouter = require("./signup.router");
 const signoutRouter = require("./signout.router")
- 
+const protectedRouter = require("./protected.router") 
+
 apiRouter.use("/signin", signinRouter)
 apiRouter.use("/signup", singupRouter)
 apiRouter.use("/signout", signoutRouter)
+apiRouter.use("/protected", protectedRouter)
 apiRouter.use("/properties", propertiesRouter)
 apiRouter.use("/favourite", favouriteRouter)
 apiRouter.use("/reviews", reviewsRouter);
