@@ -4,21 +4,19 @@ exports.selectPropertiesQuery = (maxprice, minprice, sort, order, host) => {
   let queriesCount = 0;
   let defineOrder = "";
 
-  let selectProperties = `SELECT  favourites.property_id,
+  let selectProperties = `SELECT properties.property_id,
                           properties.name AS property_name,
                           location,
                           price_per_night,
                           CONCAT(first_name, ' ', surname) AS host,
-                          image_url AS image,
+                        ARRAY(SELECT image_url FROM images WHERE property_id = properties.property_id) AS images,
                           properties.property_type AS property_type
                     FROM properties
                     JOIN users
                     ON properties.host_id = users.user_id
-                    JOIN favourites
-                    ON properties.property_id = favourites.property_id
                     JOIN images
                     ON properties.property_id = images.property_id
-                    GROUP BY properties.host_id, images.property_id, favourites.favourite_id, favourites.guest_id, favourites.property_id, property_name, location, price_per_night, host, images.image_url, property_type`
+                    GROUP BY (properties.property_id, host, images, properties.name)`
 
   if (maxprice) {
     values.push(maxprice);
@@ -33,7 +31,7 @@ exports.selectPropertiesQuery = (maxprice, minprice, sort, order, host) => {
   };
 
   if (sort === 'popularity' || !sort) {
-    queries.push(` ORDER BY favourites.property_id`)
+    queries.push(` ORDER BY properties.property_id`)
   };
 
   if (sort && sort !== "popularity") {

@@ -1,7 +1,24 @@
 \c airbnc 
 
-SELECT first_name FROM users;
--- query for host
+SELECT properties.property_id,
+                          properties.name AS property_name,
+                          location,
+                          price_per_night,
+                          CONCAT(first_name, ' ', surname) AS host,
+                        ARRAY(SELECT image_url FROM images WHERE property_id = properties.property_id) AS images,
+                          properties.property_type AS property_type
+                    FROM properties
+                    JOIN users
+                    ON properties.host_id = users.user_id
+                    JOIN images
+                    ON properties.property_id = images.property_id
+                    JOIN favourites
+                    ON properties.property_id = favourites.property_id
+                    GROUP BY (properties.property_id, host, images, properties.name);
+
+-- SELECT * FROM favourites;
+                    
+                    -- query for host
 -- SELECT user_id,
 --       first_name,
 --       surname,
