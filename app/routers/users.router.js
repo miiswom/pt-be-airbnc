@@ -8,12 +8,12 @@ const usersRouter = express.Router()
 usersRouter
 .route('/:id')
 .get(verifyAuth, getUserById)
-.patch(patchUser)
+.patch(verifyAuth, patchUser)
 .all(handleMethodNotAllowed);
 
 usersRouter
 .route("/:id/bookings")
-.get(getUsersBookings)
+.get( verifyAuth ,getUsersBookings)
 .all(handleMethodNotAllowed)
 
 usersRouter

@@ -20,22 +20,22 @@ propertiesRouter
 
 propertiesRouter
 .route("/:id/favourite")
-.post(postNewFavourite);
+.post(verifyAuth, postNewFavourite);
 
 propertiesRouter
 .route("/:id/reviews")
 .get(getPropertyReview)
 // .post(verifyToken, postNewReview);
-.post(postNewReview);
+.post(verifyAuth, ostNewReview);
 
 // bookings 
 propertiesRouter
 .route("/:id/bookings")
-.get(getPropertyBookings);
+.get(verifyAuth ,getPropertyBookings);
 
 propertiesRouter
 .route("/:id/booking")
-.post(postPropertyBooking);
+.post(verifyAuth, postPropertyBooking);
 
 propertiesRouter
 .route("/?(*)?")
