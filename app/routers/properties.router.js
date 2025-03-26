@@ -26,7 +26,7 @@ propertiesRouter
 .route("/:id/reviews")
 .get(getPropertyReview)
 // .post(verifyToken, postNewReview);
-.post(verifyAuth, ostNewReview);
+.post(verifyAuth, postNewReview);
 
 // bookings 
 propertiesRouter
