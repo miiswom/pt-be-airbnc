@@ -72,17 +72,20 @@ let selectPropertyById =  `SELECT properties.property_id,
                         description, 
                         CONCAT(first_name, ' ', surname) AS host,
                         avatar AS host_avatar,
-                        COUNT(favourites.property_id) AS favourite_count,
+                        (SELECT COALESCE((SELECT COUNT(*) 
+                          FROM properties
+                          JOIN favourites
+                          ON properties.property_id = favourites.property_id
+                          WHERE properties.property_id = $1
+                          GROUP BY  properties.property_id, favourites.property_id), 0) AS favourite_count),
                         ARRAY(SELECT image_url FROM images WHERE property_id = $1) AS images
                     FROM properties
                       JOIN users
                         ON properties.host_id = users.user_id
-                      JOIN favourites
-                        ON properties.property_id = favourites.property_id
-                      JOIN images
+                     JOIN images
                         ON properties.property_id = images.property_id
                     WHERE properties.property_id = $1
-                    GROUP BY properties.property_id, users.first_name, users.surname, users.avatar, image_url`;
+                    GROUP BY properties.property_id, users.first_name, users.surname, host_avatar;`;
 return { selectPropertyById }
 };
 

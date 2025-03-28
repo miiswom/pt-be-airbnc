@@ -1,20 +1,50 @@
 \c airbnc 
 
-SELECT properties.property_id,
-                          properties.name AS property_name,
-                          location,
-                          price_per_night,
-                          CONCAT(first_name, ' ', surname) AS host,
-                        ARRAY(SELECT image_url FROM images WHERE property_id = properties.property_id) AS images,
-                          properties.property_type AS property_type
+SELECT properties.property_id, 
+                        properties.name AS property_name, 
+                        location, 
+                        price_per_night, 
+                        description, 
+                        CONCAT(first_name, ' ', surname) AS host,
+                        avatar AS host_avatar,
+                        (SELECT COALESCE((SELECT COUNT(*) 
+                          FROM properties
+                          JOIN favourites
+                          ON properties.property_id = favourites.property_id
+                          WHERE properties.property_id = $1
+                          GROUP BY  properties.property_id, favourites.property_id), 0) AS favourite_count)
+                        ARRAY(SELECT image_url FROM images WHERE property_id = $1) AS images
                     FROM properties
-                    JOIN users
-                    ON properties.host_id = users.user_id
-                    JOIN images
-                    ON properties.property_id = images.property_id
-                    JOIN favourites
-                    ON properties.property_id = favourites.property_id
-                    GROUP BY (properties.property_id, host, images, properties.name);
+                      JOIN users
+                        ON properties.host_id = users.user_id
+                     JOIN images
+                        ON properties.property_id = images.property_id
+                    WHERE properties.property_id = $1
+                    GROUP BY properties.property_id, users.first_name, users.surname, host_avatar;
+
+-- SELECT COALESCE((SELECT COUNT(*) AS favourite_count
+-- FROM properties
+-- JOIN favourites
+-- ON properties.property_id = favourites.property_id
+-- WHERE properties.property_id = _
+-- GROUP BY  properties.property_id, favourites.property_id), 0)
+-- WHERE property_id = 16;
+
+-- SELECT properties.property_id,
+--                           properties.name AS property_name,
+--                           location,
+--                           price_per_night,
+--                           CONCAT(first_name, ' ', surname) AS host,
+--                         ARRAY(SELECT image_url FROM images WHERE property_id = properties.property_id) AS images,
+--                           properties.property_type AS property_type
+--                     FROM properties
+--                     JOIN users
+--                     ON properties.host_id = users.user_id
+--                     JOIN images
+--                     ON properties.property_id = images.property_id
+--                     JOIN favourites
+--                     ON properties.property_id = favourites.property_id
+--                     GROUP BY (properties.property_id, host, images, properties.name);
 
 -- SELECT * FROM favourites;
                     
