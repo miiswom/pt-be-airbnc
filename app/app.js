@@ -43,13 +43,13 @@ module.exports = app;
 //   "surname": "Fahed",
 //   "email": "numberone@example.com",
 //   "password": "numberone111",
-//   "phone_number": "+44 7000 151515",
+//   "phone_number": "+447000151515",
 //   "role": "guest",
 //   "avatar": "https://images.unsplash.com/photo-1534701640286-bc6b3588b776?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 // }
 
 // {
-//   "firstname": "Gemma",
+//   "first_name": "Gemma",
 //   "surname": "Doherty",
 //   "email": "numbertwo@example.com",
 //   "password": "numberone222",

@@ -26,6 +26,6 @@ createUser(newUser).then((newUser) => {
   }
 }).catch((err) => {
   console.log(err)
-  res.status
+  res.status(400).json({msg: err})
 })
 }

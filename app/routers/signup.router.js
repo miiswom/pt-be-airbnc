@@ -1,11 +1,11 @@
 const express = require("express");
-const singupRouter = express.Router();
+const signupRouter = express.Router();
 const { handleMethodNotAllowed } = require("../controllers/errors/handlingErrors");
 const { getNewUserToken} = require("../controllers/signup.controllers")
 
-singupRouter
+signupRouter
 .route("")
 .post(getNewUserToken)
 .all(handleMethodNotAllowed);
 
-module.exports = singupRouter;
+module.exports = signupRouter;
