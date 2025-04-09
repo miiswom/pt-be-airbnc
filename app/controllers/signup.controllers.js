@@ -15,6 +15,7 @@ createUser(newUser).then((newUser) => {
     .status(200)
     .json({
       msg: `Successful sign-up, welcome ${newUser[0].first_name}!`,
+      user_id: newUser[0].user_id,
       token: token
     })
   }
