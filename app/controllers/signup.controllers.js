@@ -16,16 +16,22 @@ createUser(newUser).then((newUser) => {
     // res.status(201).json({token})
     const payload = { id: newUser[0].user_id }
     const token = jwt.sign(payload, TOKEN_SECRET, {expiresIn: "1d"})
-
-    res
+    try {
+      res
     .status(200)
     .json({
       msg: `Successful sign-up, welcome ${newUser[0].first_name}!`,
       token: token
     })
+    } catch (error) {
+      console.log("we are in a try/catch")
+      next(error)
+    }
+    
   }
 }).catch((err) => {
+  console.log("we are in a catch")
   console.log(err)
-  res.status(400).json({msg: err})
+  next(err)
 })
 }
