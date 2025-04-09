@@ -5,7 +5,7 @@ exports.createUser = (newUser) => {
   
   return db.query(createUser, [...newUser]).then(({rows}) => {
     if(rows.length === 0) {
-      return Promise.reject({status: 404})
+      return Promise.reject({status: 400})
     } else {
       return rows
     }
