@@ -15,9 +15,7 @@ exports.handleNotFound = (err, req, res, next) => {
     res.status(404).json({msg: 'Sorry, not found.'}) 
   } else if (err.code === "23P01" || err.status === "23P01") { 
     res.status(404).json({msg: 'Sorry, overlapping dates.'})
-  } else if(err.code === "23505") {
-    res.status(400).json({msg: "User already exists."})
-  }else {
+  } else {
     next(err)
   }
 };
@@ -37,9 +35,11 @@ exports.handleCustomErrors = (err, req, res, next) => {
 // err.code 23505 : not_null_violation email
 
 exports.handleBadRequest = (err, req, res, next) => {
-  if(err.code === "22P02" || err.code === "23514" || err.code === "22007" || err.code === "23502" || err.status === 400) {
-    // res.status(400).json({msg: 'Sorry, bad request.'})
-    res.status(400).send(err)
+  if(err.code === "23502" || err.code === "23505") {
+    res.status(400).json({msg: "User already exists."})
+  } else if(err.code === "22P02" || err.code === "23514" || err.code === "22007" || err.status === 400) {
+    res.status(400).json({msg: 'Sorry, bad request.'})
+    // res.status(400).send(err)
   }  else {
     next(err)
   }
