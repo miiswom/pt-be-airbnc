@@ -35,7 +35,7 @@ exports.handleCustomErrors = (err, req, res, next) => {
 // err.code 23505 : not_null_violation email
 
 exports.handleBadRequest = (err, req, res, next) => {
-  if(err.code === "23502" || err.code === "23505") {
+  if(err.code.startsWith("2350")) {
     res.status(400).json({msg: "User already exists."})
   } else if(err.code === "22P02" || err.code === "23514" || err.code === "22007" || err.status === 400) {
     res.status(400).json({msg: 'Sorry, bad request.'})
