@@ -71,7 +71,7 @@ module.exports = app;
 
 // {
 //   "first_name": "Frank",
-//   "surname": "Peter",
+//   "surname": "Peterson",
 //   "email": "numberfour@example.com",
 //   "password": "number444",
 //   "phone_number": "+447000181818",
